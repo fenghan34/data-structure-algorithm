@@ -1,7 +1,6 @@
 {
-  "name": "js-algorithm",
+  "name": "data-structure-algorithm",
   "version": "0.0.1",
-  "main": "index.js",
   "private": true,
   "license": "MIT",
   "author": "Feng Han <fenghan770@gmail.com>",
@@ -16,7 +15,6 @@
     "webpack-dev-server": "^3.11.2"
   },
   "scripts": {
-    "start": "webpack serve --open",
-    "build": "webpack"
+    "start": "webpack serve --open"
   }
 }
