@@ -207,9 +207,11 @@ class DoublyLinkedList implements LinkedListType {
       } else if (index === this.#count - 1) {
         return this.#tail
       } else {
+        // 根据 index 位置推断遍历起点，优化速度
         const fromHead = index < ((this.#count / 2) ^ 1 - 1) ? true : false
         let current = fromHead ? this.#head : this.#tail
         let count = fromHead ? index : this.#count - index - 1
+        
         while (count--) {
           current = current[fromHead ? 'next' : 'prev']
         }
