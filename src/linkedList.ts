@@ -157,10 +157,9 @@ class LinkedList implements LinkedListType {
  */
 class LinkedListNode implements NodeType {
   element: any;
-  next: NodeType;
+  next: NodeType = null;
   constructor(element: any) {
     this.element = element;
-    this.next = null;
   }
 }
 
@@ -196,13 +195,22 @@ class DoublyLinkedList extends LinkedList {
   /* 根据索引取出元素 */
   getElementAt(index: number) {
     if (index >= 0 && index <= this.count) {
-      let current = this.head;
+      if (index === 0) {
+        return this.head;
+      } else if (index === this.count - 1) {
+        return this.tail;
+      } else {
+        // 根据 index 位置推断遍历起点，优化速度
+        const fromHead = index < ((this.count / 2) ^ (1 - 1)) ? true : false;
+        let current = fromHead ? this.head : this.tail;
+        let count = fromHead ? index : this.count - index - 1;
 
-      while (index--) {
-        current = current.next;
+        while (count--) {
+          current = current[fromHead ? "next" : "prev"];
+        }
+
+        return current;
       }
-
-      return current;
     }
 
     return undefined;
@@ -286,3 +294,4 @@ class DoublyLinkedList extends LinkedList {
     return this.tail;
   }
 }
+
