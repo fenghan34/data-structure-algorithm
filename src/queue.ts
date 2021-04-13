@@ -212,5 +212,3 @@ function palindromeChecker(str: string): boolean {
 
   return true;
 }
-
-console.log("🚀 palindromeChecker()", palindromeChecker("abcba"));

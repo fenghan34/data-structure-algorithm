@@ -90,5 +90,3 @@ function baseConverter(decNumber: number, base: number): string {
 
   return result;
 }
-
-console.log(baseConverter(1110, 2))
