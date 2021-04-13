@@ -2,7 +2,7 @@ interface LinkedListType {
   push: (element: any) => void;
   getElementAt: (index: number) => any;
   removeAt: (index: number) => any;
-  insert: (element: any, index: number) => boolean;
+  insert: (element: any, index?: number) => boolean;
   indexOf: (element: any) => number;
   remove: (element: any) => NodeType;
   isEmpty: () => boolean;
@@ -92,10 +92,8 @@ class LinkedList implements LinkedListType {
         this.head = node;
       } else {
         const previous = this.getElementAt(index - 1);
-        const current = this.getElementAt(index);
-
+        node.next = previous.next;
         previous.next = node;
-        node.next = current;
       }
 
       this.count++;
@@ -170,8 +168,11 @@ class DoublyLinkedListNode extends LinkedListNode {
   prev: NodeType = null;
 }
 
+/**
+ * 双向链表类
+ */
 class DoublyLinkedList extends LinkedList {
-  tail: NodeType = null;
+  protected tail: NodeType = null;
 
   /* 向尾部添加元素 */
   push(element: any) {
@@ -294,4 +295,157 @@ class DoublyLinkedList extends LinkedList {
     return this.tail;
   }
 }
+
+/**
+ * 循环链表类
+ */
+class CircularLinkedList extends LinkedList {
+  /* 向尾部添加元素 */
+  push(element: any) {
+    const node = new LinkedListNode(element);
+
+    if (!this.head) {
+      // 空链表
+      this.head = node;
+      node.next = this.head;
+    } else {
+      // 非空链表
+
+      let count = this.count;
+      let current = this.head;
+      while (--count) {
+        current = current.next;
+      }
+
+      current.next = node;
+      node.next = this.head;
+    }
+
+    this.count++;
+  }
+
+  /* 在任意位置插入元素 */
+  insert(element: any, index: number) {
+    if (index >= 0 && index <= this.count) {
+      const node = new LinkedListNode(element);
+
+      if (index === 0) {
+        if (!this.head) {
+          this.head = node;
+          node.next = this.head;
+        } else {
+          const current = this.head;
+          node.next = current;
+          this.head = node;
+          const tail = this.getElementAt(this.count - 1);
+          tail.next = this.head;
+        }
+      } else {
+        const previous = this.getElementAt(index - 1);
+        node.next = previous.next;
+        previous.next = node;
+      }
+
+      this.count++;
+      return true;
+    }
+
+    return false;
+  }
+
+  /* 根据索引移除元素 */
+  removeAt(index: number) {
+    if (index >= 0 && index < this.count) {
+      let current = this.head;
+
+      if (index === 0) {
+        // 移除第一项
+        if (this.count === 1) {
+          this.head = null;
+        } else {
+          const tail = this.getElementAt(this.count - 1);
+          this.head = current.next;
+          tail.next = this.head;
+        }
+      } else {
+        const previous = this.getElementAt(index - 1);
+        current = previous.next;
+        previous.next = current.next;
+      }
+
+      this.count--;
+      return current.element;
+    }
+
+    return undefined;
+  }
+}
+
+/**
+ * 有序链表类
+ */
+class SortedLinkedList extends LinkedList {
+  compareFn: (a: any, b: any) => -1 | 1;
+  constructor(compareFn: (a: any, b: any) => -1 | 1) {
+    super();
+    this.compareFn = compareFn;
+  }
+
+  insert(element: any) {
+    if (this.isEmpty()) {
+      return super.insert(element, 0);
+    }
+
+    const pos = this.getIndexNextSortedElement(element);
+    return super.insert(element, pos);
+  }
+
+  /* 获取排序后的插入位置 */
+  protected getIndexNextSortedElement(element: any) {
+    let current = this.head;
+    let index = 0;
+
+    while (current && this.compareFn(element, current.element) === 1) {
+      current = current.next;
+      index++;
+    }
+
+    return index;
+  }
+}
+
+/**
+ * 使用链表实现栈
+ */
+class StackLinkedList {
+  items: DoublyLinkedList;
+  constructor() {
+    this.items = new DoublyLinkedList();
+  }
+
+  push(element: any) {
+    this.items.push(element);
+  }
+
+  pop() {
+    if (this.isEmpty()) {
+      return undefined;
+    }
+
+    return this.items.removeAt(this.size() - 1);
+  }
+
+  peek() {
+    return this.items.getTail().element;
+  }
+
+  size() {
+    return this.items.size();
+  }
+
+  isEmpty() {
+    return this.items.isEmpty();
+  }
+}
+
 
