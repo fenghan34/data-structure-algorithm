@@ -8,16 +8,12 @@ interface StackType {
   peek: () => any;
 }
 
-interface Items {
-  [key: string]: any;
-}
-
 /**
  * 栈
  * @constructor
  */
 class Stack implements StackType {
-  #items: Items = {};
+  #items: {[key: string]: unknown};
   #count: number = 0;
 
   size() {
@@ -85,7 +81,7 @@ function baseConverter(decNumber: number, base: number): string {
   }
 
   while (!stack.isEmpty()) {
-    result += digits[stack.pop()];
+    result += digits[stack.pop() as number];
   }
 
   return result;
