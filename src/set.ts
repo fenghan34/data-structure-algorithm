@@ -8,12 +8,13 @@ class MySet {
     this.items = {};
 
     if (iterable) {
-      [...iterable].forEach((v: string) => this.add(v));
+      [...iterable].forEach((v: unknown) => this.add(v));
     }
   }
 
   add(element: any): boolean {
     if (!this.has(element)) {
+      console.log(element);
       this.items[element] = element;
       return true;
     }
@@ -46,7 +47,7 @@ class MySet {
     return Object.values(this.items);
   }
 
-  keys(): string[] {
+  keys(): unknown[] {
     return Object.keys(this.items);
   }
 
