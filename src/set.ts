@@ -60,7 +60,7 @@ class MySet {
     thisArg?: any
   ): void {
     for (const entry of this.entries()) {
-      callback.apply(thisArg, [...entry, this]);
+      callback.apply(thisArg || null, [...entry, this]);
     }
   }
 
