@@ -1,11 +1,11 @@
 interface StackType {
-  size: () => number;
-  isEmpty: () => boolean;
-  clear: () => void;
-  toString: () => string;
-  push: <E>(element: E) => void;
-  pop: () => any;
-  peek: () => any;
+  size: () => number
+  isEmpty: () => boolean
+  clear: () => void
+  toString: () => string
+  push: <E>(element: E) => void
+  pop: () => any
+  peek: () => any
 }
 
 /**
@@ -13,49 +13,49 @@ interface StackType {
  * @constructor
  */
 class Stack implements StackType {
-  #items: {[key: string]: unknown};
-  #count: number = 0;
+  #items: { [key: string]: unknown }
+  #count: number = 0
 
   size() {
-    return this.#count;
+    return this.#count
   }
 
   isEmpty() {
-    return this.size() === 0;
+    return this.size() === 0
   }
 
   clear() {
-    this.#items = {};
-    this.#count = 0;
+    this.#items = {}
+    this.#count = 0
   }
 
   toString() {
-    if (this.isEmpty()) return "";
+    if (this.isEmpty()) return ''
 
-    let str = "";
+    let str = ''
     for (let i = 0; i < this.#count; i++) {
-      str += this.#items[i];
+      str += this.#items[i]
     }
 
-    return str;
+    return str
   }
 
   push<E>(element: E) {
-    this.#items[this.#count++] = element;
+    this.#items[this.#count++] = element
   }
 
   pop() {
-    if (this.isEmpty()) return undefined;
+    if (this.isEmpty()) return undefined
 
-    this.#count--;
-    const item = this.#items[this.#count];
-    delete this.#items[this.#count];
-    return item;
+    this.#count--
+    const item = this.#items[this.#count]
+    delete this.#items[this.#count]
+    return item
   }
 
   peek() {
-    if (this.isEmpty()) return undefined;
-    return this.#items[this.#count - 1];
+    if (this.isEmpty()) return undefined
+    return this.#items[this.#count - 1]
   }
 }
 
@@ -67,22 +67,24 @@ class Stack implements StackType {
  * @returns {string} 转换结果
  */
 function baseConverter(decNumber: number, base: number): string {
-  const stack = new Stack();
-  const digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const stack = new Stack()
+  const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-  if (!(base >= 2 && base <= 36)) return "";
+  if (!(base >= 2 && base <= 36)) return ''
 
-  let rem;
-  let result = "";
+  let rem
+  let result = ''
   while (decNumber > 0) {
-    rem = ~~(decNumber % base);
-    stack.push(rem);
-    decNumber = ~~(decNumber / base);
+    rem = ~~(decNumber % base)
+    stack.push(rem)
+    decNumber = ~~(decNumber / base)
   }
 
   while (!stack.isEmpty()) {
-    result += digits[stack.pop() as number];
+    result += digits[stack.pop() as number]
   }
 
-  return result;
+  return result
 }
+
+export { Stack }
