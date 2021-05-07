@@ -354,7 +354,7 @@ class AVLTree extends BinarySearchTree {
 /**
  * 自平衡二叉搜索树-红黑树
  */
-class RedBlackTree extends BinarySearchTree {
+class RedBlackTree extends AVLTree {
   root: RedBlackTreeNode
 
   /* 插入新节点 */
@@ -364,8 +364,141 @@ class RedBlackTree extends BinarySearchTree {
       this.root.color = Color.BLACK
     } else {
       const node = this.insertNode(this.root, key)
-      // this.fixTreeProperties(node)
+      this.fixTreeProperties(node)
     }
+  }
+
+  protected insertNode<T>(node: RedBlackTreeNode, key: T): RedBlackTreeNode {
+    if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
+      if (node.left == null) {
+        node.left = new RedBlackTreeNode(key)
+        node.left.parent = node
+        return node.left
+      } else {
+        return this.insertNode(node.left, key)
+      }
+    } else if (node.right == null) {
+      node.right = new RedBlackTreeNode(key)
+      node.right.parent = node
+      return node.right
+    } else {
+      return this.insertNode(node.right, key)
+    }
+  }
+
+  /* 插入节点后验证红黑树属性 */
+  protected fixTreeProperties(node: RedBlackTreeNode) {
+    while (
+      node &&
+      node.parent &&
+      node.parent.isRed() &&
+      node.color !== Color.BLACK
+    ) {
+      let parent = node.parent
+      const grandParent = parent.parent
+
+      // 父节点是左侧子节点
+      if (grandParent && grandParent.left === parent) {
+        const uncle = grandParent.right
+
+        // 叔节点也是红色——只需要重新填色
+        if (uncle && uncle.color === Color.RED) {
+          grandParent.color = Color.RED
+          parent.color = Color.BLACK
+          uncle.color = Color.BLACK
+          node = grandParent
+        } else {
+          // 节点是右侧子节点-左旋转
+          if (node === parent.right) {
+            this.rotationRR(parent)
+            node = parent
+            parent = node.parent
+          }
+
+          // 节点是左侧子节点-右旋转
+          this.rotationLL(grandParent)
+          parent.color = Color.BLACK
+          grandParent.color = Color.RED
+          node = parent
+        }
+      } else {
+        // 父节点是右侧子节点
+        const uncle = grandParent.left
+
+        // 叔节点是右侧子节点
+        if (uncle && uncle.color === Color.RED) {
+          grandParent.color = Color.RED
+          parent.color = Color.BLACK
+          uncle.color = Color.BLACK
+          node = grandParent
+        } else {
+          // 节点是左侧子节点-右旋转
+          if (node === parent.left) {
+            this.rotationLL(parent)
+            node = parent
+            parent = node.parent
+          }
+
+          // 节点是右侧子节点-左旋转
+          this.rotationRR(grandParent)
+          parent.color = Color.BLACK
+          grandParent.color = Color.RED
+          node = parent
+        }
+      }
+    }
+
+    this.root.color = Color.BLACK
+  }
+
+  /* 左-左旋转（右旋转） */
+  rotationLL(node: RedBlackTreeNode): any {
+    const temp = node.left
+    node.left = temp.right
+
+    if (temp.right && temp.right.key) {
+      temp.right.parent = node
+    }
+
+    temp.parent = node.parent
+
+    if (!node.parent) {
+      this.root = temp
+    } else {
+      if (node === node.parent.left) {
+        node.parent.left = temp
+      } else {
+        node.parent.right = temp
+      }
+    }
+
+    temp.right = node
+    node.parent = temp
+  }
+
+  /* 右-右旋转（左旋转） */
+  rotationRR(node: RedBlackTreeNode): any {
+    const tmp = node.right
+    node.right = tmp.left
+
+    if (tmp.left && tmp.left.key) {
+      tmp.left.parent = node
+    }
+
+    tmp.parent = node.parent
+
+    if (!node.parent) {
+      this.root = tmp
+    } else {
+      if (node === node.parent.left) {
+        node.parent.left = tmp
+      } else {
+        node.parent.right = tmp
+      }
+    }
+
+    tmp.left = node
+    node.parent = tmp
   }
 }
 
@@ -380,6 +513,8 @@ enum Color {
 class RedBlackTreeNode extends TreeNode {
   color: Color = Color.RED
   parent: RedBlackTreeNode = null
+  left: RedBlackTreeNode
+  right: RedBlackTreeNode
 
   isRed() {
     return this.color === Color.RED
