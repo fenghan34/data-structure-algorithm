@@ -1,3 +1,5 @@
+import { Compare, CompareFn, defaultCompare } from "./utils/index"
+
 /**
  * 树节点类型
  */
@@ -10,22 +12,7 @@ class TreeNode {
   }
 }
 
-enum Compare {
-  LESS_THAN,
-  EQUAL,
-  BIGGER_THAN,
-}
-
-type CompareFn = (param1: unknown, param2: unknown) => Compare
 type TraverseCallback = (param: unknown) => void
-
-const defaultCompare: CompareFn = (param1: unknown, param2: unknown) => {
-  return param1 < param2
-    ? Compare.LESS_THAN
-    : param1 === param2
-    ? Compare.EQUAL
-    : Compare.BIGGER_THAN
-}
 
 /**
  * 二叉搜索树类型
