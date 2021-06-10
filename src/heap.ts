@@ -1,4 +1,10 @@
-import { Compare, CompareFn, defaultCompare, swap } from './utils/index'
+import {
+  Compare,
+  CompareFn,
+  defaultCompare,
+  reverseCompare,
+  swap,
+} from './utils/index'
 
 /**
  * 最小堆类
@@ -25,7 +31,7 @@ class MinHeap<T> {
   getParentIndex(index: number): number | undefined {
     if (index === 0) return undefined
 
-    return ~~(index - 1) / 2
+    return ~~((index - 1) / 2)
   }
 
   /* 插入新值 */
@@ -53,9 +59,134 @@ class MinHeap<T> {
     }
   }
 
-  /* 移除最小值 */
-  extract(): T {}
+  /* 堆大小 */
+  size() {
+    return this.heap.length
+  }
+
+  /* 堆是否为空 */
+  isEmpty() {
+    return this.size() === 0
+  }
 
   /* 找出最小值 */
-  findMinimum(): T {}
+  findMinimum(): T {
+    return this.isEmpty() ? undefined : this.heap[0]
+  }
+
+  /* 移除最小值 */
+  extract(): T {
+    if (this.isEmpty()) {
+      return undefined
+    }
+
+    if (this.size() === 1) {
+      return this.heap.shift()
+    }
+
+    const removedValue = this.heap.shift()
+    this.siftDown(0)
+    return removedValue
+  }
+
+  /* 下移操作（堆化） */
+  siftDown(index: number) {
+    let element = index
+    const left = this.getLeftIndex(index)
+    const right = this.getRightIndex(index)
+    const size = this.size()
+
+    if (
+      left < size &&
+      this.compareFn(this.heap[element], this.heap[left]) ===
+        Compare.BIGGER_THAN
+    ) {
+      element = left
+    }
+
+    if (
+      right < size &&
+      this.compareFn(this.heap[element], this.heap[right]) ===
+        Compare.BIGGER_THAN
+    ) {
+      element = right
+    }
+
+    if (index !== element) {
+      swap(this.heap, index, element)
+      this.siftDown(element)
+    }
+  }
+}
+
+/**
+ * 最大堆类
+ */
+class MaxHeap<T> extends MinHeap<T> {
+  constructor(compareFn = defaultCompare) {
+    super(compareFn)
+    this.compareFn = reverseCompare(compareFn)
+  }
+}
+
+/**
+ * 堆排序算法
+ * @param array 数字数组
+ * @param compareFn 对比函数
+ */
+function heapSort(array: number[], compareFn = defaultCompare) {
+  let heapSize = array.length
+
+  buildMaxHeap(array, compareFn)
+
+  while (heapSize > 1) {
+    swap(array, 0, --heapSize)
+    heapify(array, 0, heapSize, compareFn)
+  }
+
+  return array
+}
+
+/**
+ * 构建最大堆
+ */
+function buildMaxHeap(array: number[], compareFn: CompareFn) {
+  debugger
+  for (let i = ~~(array.length / 2); i >= 0; i--) {
+    heapify(array, i, array.length, compareFn)
+  }
+}
+
+/**
+ * 下移操作
+ */
+function heapify(
+  array: number[],
+  index: number,
+  heapSize: number,
+  compareFn: CompareFn
+) {
+  debugger
+  let element = index
+  const left = index * 2 + 1
+  const right = index * 2 + 2
+
+  if (
+    left < heapSize &&
+    compareFn(array[element], array[left]) === Compare.BIGGER_THAN
+  ) {
+    element = left
+  }
+
+  if (
+    right < heapSize &&
+    compareFn(array[element], array[right]) === Compare.BIGGER_THAN
+  ) {
+    element = right
+  }
+
+  if (index !== element) {
+    swap(array, index, element)
+    heapify(array, element, heapSize, compareFn)
+  }
 }
