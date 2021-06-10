@@ -7,7 +7,7 @@ export enum Compare {
 export type CompareFn = (param1: unknown, param2: unknown) => Compare
 
 /**
- * 对比函数  
+ * 对比函数
  */
 export const defaultCompare: CompareFn = (param1: unknown, param2: unknown) => {
   return param1 < param2
@@ -15,6 +15,13 @@ export const defaultCompare: CompareFn = (param1: unknown, param2: unknown) => {
     : param1 === param2
     ? Compare.EQUAL
     : Compare.BIGGER_THAN
+}
+
+/**
+ * 反转对比函数（参数位置反转）
+ */
+export const reverseCompare = (compareFn: CompareFn) => {
+  return (a: unknown, b: unknown) => compareFn(b, a)
 }
 
 /**
