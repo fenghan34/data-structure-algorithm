@@ -9,7 +9,7 @@ import {
 /**
  * 最小堆类
  */
-class MinHeap<T> {
+export class MinHeap<T> {
   compareFn: CompareFn
   heap: T[]
   constructor(compareFn = defaultCompare) {
@@ -91,6 +91,8 @@ class MinHeap<T> {
 
   /* 下移操作（堆化） */
   siftDown(index: number) {
+    // 先找到最大值与最小值替换，再逐级往下比较进行替换操作，直至形成新的二叉堆
+
     let element = index
     const left = this.getLeftIndex(index)
     const right = this.getRightIndex(index)
@@ -122,7 +124,7 @@ class MinHeap<T> {
 /**
  * 最大堆类
  */
-class MaxHeap<T> extends MinHeap<T> {
+export class MaxHeap<T> extends MinHeap<T> {
   constructor(compareFn = defaultCompare) {
     super(compareFn)
     this.compareFn = reverseCompare(compareFn)
@@ -133,8 +135,9 @@ class MaxHeap<T> extends MinHeap<T> {
  * 堆排序算法
  * @param array 数字数组
  * @param compareFn 对比函数
+ * @returns 由大到小排列的数字数组
  */
-function heapSort(array: number[], compareFn = defaultCompare) {
+export function heapSort(array: number[], compareFn = defaultCompare) {
   let heapSize = array.length
 
   buildMaxHeap(array, compareFn)
@@ -151,7 +154,6 @@ function heapSort(array: number[], compareFn = defaultCompare) {
  * 构建最大堆
  */
 function buildMaxHeap(array: number[], compareFn: CompareFn) {
-  debugger
   for (let i = ~~(array.length / 2); i >= 0; i--) {
     heapify(array, i, array.length, compareFn)
   }
@@ -166,21 +168,20 @@ function heapify(
   heapSize: number,
   compareFn: CompareFn
 ) {
-  debugger
   let element = index
   const left = index * 2 + 1
   const right = index * 2 + 2
 
   if (
     left < heapSize &&
-    compareFn(array[element], array[left]) === Compare.BIGGER_THAN
+    compareFn(array[element], array[left]) === Compare.LESS_THAN
   ) {
     element = left
   }
 
   if (
     right < heapSize &&
-    compareFn(array[element], array[right]) === Compare.BIGGER_THAN
+    compareFn(array[element], array[right]) === Compare.LESS_THAN
   ) {
     element = right
   }
