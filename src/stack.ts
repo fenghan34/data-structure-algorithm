@@ -1,23 +1,12 @@
-interface StackType {
-  size: () => number
-  isEmpty: () => boolean
-  clear: () => void
-  toString: () => string
-  push: <E>(element: E) => void
-  pop: () => any
-  peek: () => any
-}
-
 /**
  * 栈
- * @constructor
  */
-class Stack implements StackType {
-  #items: { [key: string]: unknown }
-  #count: number = 0
+class Stack<E = any> {
+  private items: Record<number, E> = {}
+  private count: number = 0
 
   size() {
-    return this.#count
+    return this.count
   }
 
   isEmpty() {
@@ -25,37 +14,37 @@ class Stack implements StackType {
   }
 
   clear() {
-    this.#items = {}
-    this.#count = 0
+    this.items = {}
+    this.count = 0
   }
 
   toString() {
     if (this.isEmpty()) return ''
 
     let str = ''
-    for (let i = 0; i < this.#count; i++) {
-      str += this.#items[i]
+    for (let i = 0; i < this.count; i++) {
+      str += this.items[i]
     }
 
     return str
   }
 
-  push<E>(element: E) {
-    this.#items[this.#count++] = element
+  push(element: E) {
+    this.items[this.count++] = element
   }
 
   pop() {
     if (this.isEmpty()) return undefined
 
-    this.#count--
-    const item = this.#items[this.#count]
-    delete this.#items[this.#count]
+    this.count--
+    const item = this.items[this.count]
+    delete this.items[this.count]
     return item
   }
 
   peek() {
     if (this.isEmpty()) return undefined
-    return this.#items[this.#count - 1]
+    return this.items[this.count - 1]
   }
 }
 
