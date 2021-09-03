@@ -6,10 +6,10 @@ const defaultToString: ToString = (param: unknown) => '' + param
 /**
  * 字典值类型
  */
-class ValuePair {
-  key: unknown
-  value: unknown
-  constructor(key: unknown, value: unknown) {
+class ValuePair<K = any, V = any> {
+  key: K
+  value: V
+  constructor(key: K, value: V) {
     this.key = key
     this.value = value
   }
@@ -22,21 +22,21 @@ class ValuePair {
 /**
  * 字典类型
  */
-class Dictionary {
+class Dictionary<K = any, V = any> {
   toStrFn: ToString
-  table: { [key: string]: ValuePair } = {}
+  table: { [key: string]: ValuePair<K, V> } = {}
 
   constructor(toStrFn: ToString = defaultToString) {
     this.toStrFn = toStrFn
   }
 
   /* 检测一个键是否存在于字典中 */
-  hasKey(key: unknown) {
+  hasKey(key: K) {
     return this.table[this.toStrFn(key)] != null
   }
 
   /* 向字典中添加元素 */
-  set(key: unknown, value: unknown): boolean {
+  set(key: K, value: V): boolean {
     if (key != null && value != null) {
       const tableKey: string = this.toStrFn(key)
       this.table[tableKey] = new ValuePair(key, value)
@@ -47,7 +47,7 @@ class Dictionary {
   }
 
   /* 从字典中移除一个值 */
-  remove(key: unknown): boolean {
+  remove(key: K): boolean {
     if (this.hasKey(key)) {
       delete this.table[this.toStrFn(key)]
       return true
@@ -56,31 +56,28 @@ class Dictionary {
   }
 
   /* 从字典中检索一个值 */
-  get(key: unknown): unknown {
+  get(key: K): V {
     const valuePair = this.table[this.toStrFn(key)]
     return valuePair?.value || undefined
   }
 
   /* 获取字典中所有的 valuePair 对象 */
-  keyValues(): ValuePair[] {
+  keyValues(): ValuePair<K, V>[] {
     return Object.values(this.table)
   }
 
   /* 获取字典中所有原始键名，也就是 valuePair 对象的 key 属性 */
-  keys(): Array<unknown> {
+  keys(): Array<K> {
     return this.keyValues().map((v) => v.key)
   }
 
   /* 获取字典中所有值，也就是 valuePair 对象的 value 属性 */
-  values(): Array<unknown> {
+  values(): Array<V> {
     return this.keyValues().map((v) => v.value)
   }
 
   /* 迭代方法 */
-  forEach(
-    callback: (key: unknown, value: unknown) => void,
-    thisArg?: any
-  ): void {
+  forEach(callback: (key: K, value: V) => void, thisArg?: any): void {
     const valuePairs = this.keyValues()
 
     for (let { key, value } of valuePairs) {
@@ -145,10 +142,10 @@ function djb2HashCode(key: unknown): number {
 /**
  * 散列表类型
  */
-class HashMap {
+class HashMap<K = any, V = any> {
   toStrFn: ToString
   hashCode: ToHashCode // 散列函数
-  table: { [key: string]: ValuePair | LinkedList } = {}
+  table: { [key: string]: ValuePair<K, V> | LinkedList } = {}
   constructor(
     toStrFn: ToString = defaultToString,
     hashCode: ToHashCode = loseloseHashCode
@@ -158,7 +155,7 @@ class HashMap {
   }
 
   /* 将键和值加入散列表 */
-  put(key: unknown, value: unknown): boolean {
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
       this.table[pos] = new ValuePair(key, value)
@@ -170,13 +167,13 @@ class HashMap {
   }
 
   /* 从散列表中获取一个值 */
-  get(key: unknown): unknown {
+  get(key: K): V {
     const valuePair = this.table[this.hashCode(key)]
-    return (valuePair as ValuePair)?.value
+    return (valuePair as ValuePair<K, V>)?.value
   }
 
   /* 从散列表中移除一个值 */
-  remove(key: unknown): boolean {
+  remove(key: K): boolean {
     const hash = this.hashCode(key)
     const valuePair = this.table[hash]
 
@@ -205,10 +202,10 @@ class HashMap {
 /**
  * 分离链接法解决散列冲突
  */
-class HashMapSeparateChaining extends HashMap {
+class HashMapSeparateChaining<K = any, V = any> extends HashMap {
   table: { [key: string]: LinkedList } = {}
 
-  put(key: unknown, value: unknown): boolean {
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
 
@@ -223,7 +220,7 @@ class HashMapSeparateChaining extends HashMap {
     return false
   }
 
-  get(key: unknown): unknown {
+  get(key: K): V {
     const pos = this.hashCode(key)
     const linkedList = this.table[pos]
 
@@ -239,7 +236,7 @@ class HashMapSeparateChaining extends HashMap {
     return undefined
   }
 
-  remove(key: unknown): boolean {
+  remove(key: K): boolean {
     const pos = this.hashCode(key)
     const linkedList = this.table[pos]
 
@@ -263,9 +260,9 @@ class HashMapSeparateChaining extends HashMap {
 /**
  * 线性探查法（非惰性）解决散列冲突
  */
-class HashMapLinearProbing extends HashMap {
-  table: { [key: string]: ValuePair }
-  put(key: unknown, value: unknown): boolean {
+class HashMapLinearProbing<K = any, V = any> extends HashMap {
+  table: { [key: string]: ValuePair<K, V> }
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
       if (!this.table[pos]) {
@@ -282,7 +279,7 @@ class HashMapLinearProbing extends HashMap {
     return false
   }
 
-  get(key: unknown): unknown {
+  get(key: K): V {
     const pos = this.hashCode(key)
     let valuePair = this.table[pos]
 
@@ -303,7 +300,7 @@ class HashMapLinearProbing extends HashMap {
     return undefined
   }
 
-  remove(key: unknown): boolean {
+  remove(key: K): boolean {
     const pos = this.hashCode(key)
     let valuePair = this.table[pos]
     if (valuePair) {
@@ -328,7 +325,7 @@ class HashMapLinearProbing extends HashMap {
     return false
   }
 
-  verifyRemoveSideEffect(key: unknown, removedPosition: number) {
+  verifyRemoveSideEffect(key: K, removedPosition: number) {
     const hash = this.hashCode(key)
     let index = removedPosition + 1
     while (this.table[index]) {
