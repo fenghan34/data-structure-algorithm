@@ -10,7 +10,7 @@ import {
  * 最小堆类
  */
 export class MinHeap<T> {
-  compareFn: CompareFn
+  compareFn: CompareFn<T>
   heap: T[]
   constructor(compareFn = defaultCompare) {
     this.compareFn = compareFn
@@ -46,7 +46,7 @@ export class MinHeap<T> {
 
   /* 上移操作，直到不存在父节点大于插入的新值 */
   siftUp(index: number) {
-    let parentIndex = this.getParentIndex(index)
+    let parentIndex = this.getParentIndex(index) as number
 
     while (
       index > 0 &&
@@ -55,7 +55,7 @@ export class MinHeap<T> {
     ) {
       swap<T>(this.heap, parentIndex, index)
       index = parentIndex
-      parentIndex = this.getParentIndex(index)
+      parentIndex = this.getParentIndex(index) as number
     }
   }
 
@@ -70,12 +70,12 @@ export class MinHeap<T> {
   }
 
   /* 找出最小值 */
-  findMinimum(): T {
+  findMinimum(): T | undefined {
     return this.isEmpty() ? undefined : this.heap[0]
   }
 
   /* 移除最小值 */
-  extract(): T {
+  extract(): T | undefined {
     if (this.isEmpty()) {
       return undefined
     }

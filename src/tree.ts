@@ -1,13 +1,13 @@
-import { Compare, CompareFn, defaultCompare } from "./utils/index"
+import { Compare, CompareFn, defaultCompare } from './utils/index'
 
 /**
  * 树节点类型
  */
-class TreeNode {
-  key: unknown
-  left: TreeNode = null
-  right: TreeNode = null
-  constructor(key: unknown) {
+class TreeNode<K> {
+  key: K
+  left: TreeNode<K> | null = null
+  right: TreeNode<K> | null = null
+  constructor(key: K) {
     this.key = key
   }
 }
@@ -17,15 +17,15 @@ type TraverseCallback = (param: unknown) => void
 /**
  * 二叉搜索树类型
  */
-class BinarySearchTree {
-  root: TreeNode = null // 根节点引用
-  compareFn: CompareFn // 用于比较节点键值
+class BinarySearchTree<K> {
+  root: TreeNode<K> | null = null // 根节点引用
+  compareFn: CompareFn<K> // 用于比较节点键值
   constructor(compareFn = defaultCompare) {
     this.compareFn = compareFn
   }
 
   /* 向二叉搜索树插入一个键 */
-  insert(key: unknown): void {
+  insert(key: K): void {
     if (!this.root) {
       this.root = new TreeNode(key)
     } else {
@@ -33,7 +33,7 @@ class BinarySearchTree {
     }
   }
 
-  protected insertNode(node: TreeNode, key: unknown): void {
+  protected insertNode(node: TreeNode<K>, key: K): void {
     if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
       // 新节点键小于当前节点键
       if (!node.left) {
@@ -57,7 +57,7 @@ class BinarySearchTree {
   }
 
   protected inOrderTraverseNode(
-    node: TreeNode,
+    node: TreeNode<K> | null,
     callback: TraverseCallback
   ): void {
     if (node) {
@@ -73,7 +73,7 @@ class BinarySearchTree {
   }
 
   protected preOrderTraverseNode(
-    node: TreeNode,
+    node: TreeNode<K> | null,
     callback: TraverseCallback
   ): void {
     if (node) {
@@ -88,7 +88,10 @@ class BinarySearchTree {
     this.postOrderTraverseNode(this.root, callback)
   }
 
-  postOrderTraverseNode(node: TreeNode, callback: TraverseCallback): void {
+  postOrderTraverseNode(
+    node: TreeNode<K> | null,
+    callback: TraverseCallback
+  ): void {
     if (node) {
       this.postOrderTraverseNode(node.left, callback)
       this.postOrderTraverseNode(node.right, callback)
@@ -101,7 +104,7 @@ class BinarySearchTree {
     return this.minNode(this.root)?.key
   }
 
-  protected minNode(node: TreeNode): TreeNode {
+  protected minNode(node: TreeNode<K> | null): TreeNode<K> | null {
     let current = node
 
     while (current && current.left) {
@@ -116,7 +119,7 @@ class BinarySearchTree {
     return this.maxNode(this.root)?.key
   }
 
-  protected maxNode(node: TreeNode): TreeNode {
+  protected maxNode(node: TreeNode<K> | null): TreeNode<K> | null {
     let current = node
 
     while (current && current.right) {
@@ -127,11 +130,11 @@ class BinarySearchTree {
   }
 
   /* 搜索一个特定的值 */
-  search(key: unknown): boolean {
+  search(key: K): boolean {
     return this.searchNode(this.root, key)
   }
 
-  protected searchNode(node: TreeNode, key: unknown): boolean {
+  protected searchNode(node: TreeNode<K> | null, key: K): boolean {
     if (!node) return false
 
     const compareRes = this.compareFn(key, node.key)
@@ -144,11 +147,11 @@ class BinarySearchTree {
   }
 
   /* 移除一个节点 */
-  remove(key: unknown): void {
+  remove(key: K): void {
     this.root = this.removeNode(this.root, key)
   }
 
-  protected removeNode(node: TreeNode, key: unknown): TreeNode {
+  protected removeNode(node: TreeNode<K> | null, key: K): TreeNode<K> | null {
     if (!node) return null
 
     const compareRes = this.compareFn(key, node.key)
@@ -181,7 +184,7 @@ class BinarySearchTree {
       }
 
       // 左右侧子节点都有
-      const aux = this.minNode(node.right) // 找到右侧子树最小的节点
+      const aux = this.minNode(node.right) as TreeNode<K> // 找到右侧子树最小的节点
       node.key = aux.key // 用右侧子树中最小节点的键去更新这个节点的值
       node.right = this.removeNode(node.right, aux.key) // 移除右侧子树中的最小节点
       return node
@@ -200,9 +203,9 @@ enum BalanceFactor {
 /**
  * 自平衡二叉搜索树-AVL类型
  */
-class AVLTree extends BinarySearchTree {
+class AVLTree<K> extends BinarySearchTree<K> {
   /* 计算一个节点高度 */
-  getNodeHeight(node: TreeNode): number {
+  getNodeHeight(node: TreeNode<K> | null): number {
     return node
       ? Math.max(
           this.getNodeHeight(node.left),
@@ -212,9 +215,10 @@ class AVLTree extends BinarySearchTree {
   }
 
   /* 计算一个节点的平衡因子 */
-  getBalanceFactor(node: TreeNode): BalanceFactor {
+  getBalanceFactor(node: TreeNode<K> | null): BalanceFactor {
     const heightDiff =
-      this.getNodeHeight(node.left) - this.getNodeHeight(node.right)
+      this.getNodeHeight((node as TreeNode<K>).left) -
+      this.getNodeHeight((node as TreeNode<K>).right)
 
     switch (heightDiff) {
       case -2:
@@ -231,11 +235,11 @@ class AVLTree extends BinarySearchTree {
   }
 
   /* 向 AVL 树插入节点 */
-  insert(key: unknown): void {
+  insert(key: K): void {
     this.root = this.insertNode(this.root, key)
   }
 
-  protected insertNode(node: TreeNode, key: unknown): TreeNode {
+  protected insertNode(node: TreeNode<K> | null, key: K): TreeNode<K> | null {
     if (!node) {
       return new TreeNode(key)
     }
@@ -252,7 +256,10 @@ class AVLTree extends BinarySearchTree {
     const balanceFactor = this.getBalanceFactor(node)
 
     if (balanceFactor === BalanceFactor.UNBALANCED_LEFT) {
-      if (this.compareFn(key, node.left.key) === Compare.LESS_THAN) {
+      if (
+        this.compareFn(key, (node.left as TreeNode<K>).key) ===
+        Compare.LESS_THAN
+      ) {
         node = this.rotationLL(node)
       } else {
         return this.rotationLR(node)
@@ -260,7 +267,10 @@ class AVLTree extends BinarySearchTree {
     }
 
     if (balanceFactor === BalanceFactor.UNBALANCED_RIGHT) {
-      if (this.compareFn(key, node.right.key) === Compare.BIGGER_THAN) {
+      if (
+        this.compareFn(key, (node.right as TreeNode<K>).key) ===
+        Compare.BIGGER_THAN
+      ) {
         node = this.rotationRR(node)
       } else {
         return this.rotationRL(node)
@@ -271,35 +281,35 @@ class AVLTree extends BinarySearchTree {
   }
 
   /* LL 向右的单旋转 */
-  rotationLL(node: TreeNode): TreeNode {
-    const temp = node.left
+  rotationLL(node: TreeNode<K>): TreeNode<K> {
+    const temp = node.left as TreeNode<K>
     node.left = temp.right
     temp.right = node
     return temp
   }
 
   /* RR 向左的单旋转 */
-  rotationRR(node: TreeNode): TreeNode {
-    const temp = node.right
+  rotationRR(node: TreeNode<K>): TreeNode<K> {
+    const temp = node.right as TreeNode<K>
     node.right = temp.left
     temp.left = node
     return temp
   }
 
   /* LR 向右的双旋转 */
-  rotationLR(node: TreeNode): TreeNode {
-    node.left = this.rotationRR(node.left)
+  rotationLR(node: TreeNode<K>): TreeNode<K> {
+    node.left = this.rotationRR(node.left as TreeNode<K>)
     return this.rotationLL(node)
   }
 
   /* RL 向左的双旋转 */
-  rotationRL(node: TreeNode): TreeNode {
-    node.right = this.rotationLL(node.right)
+  rotationRL(node: TreeNode<K>): TreeNode<K> {
+    node.right = this.rotationLL(node.right as TreeNode<K>)
     return this.rotationRR(node)
   }
 
   /* 从 AVL 树中移除节点 */
-  removeNode(node: TreeNode, key: unknown): TreeNode {
+  removeNode(node: TreeNode<K> | null, key: K): TreeNode<K> | null {
     node = super.removeNode(node, key)
     if (!node) return node // null，不需要平衡
 
@@ -316,7 +326,7 @@ class AVLTree extends BinarySearchTree {
       }
 
       if (balanceFactorLeft === BalanceFactor.SLIGHTLY_UNBALANCED_RIGHT) {
-        return this.rotationLR(node.left)
+        return this.rotationLR(node.left as TreeNode<K>)
       }
     }
 
@@ -330,7 +340,7 @@ class AVLTree extends BinarySearchTree {
       }
 
       if (balanceFactorRight === BalanceFactor.SLIGHTLY_UNBALANCED_LEFT) {
-        return this.rotationRL(node.left)
+        return this.rotationRL(node.left as TreeNode<K>)
       }
     }
 
@@ -341,11 +351,11 @@ class AVLTree extends BinarySearchTree {
 /**
  * 自平衡二叉搜索树-红黑树
  */
-class RedBlackTree extends AVLTree {
-  root: RedBlackTreeNode
+class RedBlackTree<K> extends AVLTree<K> {
+  root: RedBlackTreeNode<K>
 
   /* 插入新节点 */
-  insert(key: unknown): void {
+  insert(key: K): void {
     if (!this.root) {
       this.root = new RedBlackTreeNode(key)
       this.root.color = Color.BLACK
@@ -355,7 +365,7 @@ class RedBlackTree extends AVLTree {
     }
   }
 
-  protected insertNode<T>(node: RedBlackTreeNode, key: T): RedBlackTreeNode {
+  protected insertNode(node: RedBlackTreeNode<K>, key: K): RedBlackTreeNode<K> {
     if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
       if (node.left == null) {
         node.left = new RedBlackTreeNode(key)
@@ -374,7 +384,7 @@ class RedBlackTree extends AVLTree {
   }
 
   /* 插入节点后验证红黑树属性 */
-  protected fixTreeProperties(node: RedBlackTreeNode) {
+  protected fixTreeProperties(node: RedBlackTreeNode<K>) {
     while (
       node &&
       node.parent &&
@@ -384,53 +394,55 @@ class RedBlackTree extends AVLTree {
       let parent = node.parent
       const grandParent = parent.parent
 
-      // 父节点是左侧子节点
-      if (grandParent && grandParent.left === parent) {
-        const uncle = grandParent.right
+      if (grandParent) {
+        if (grandParent.left === parent) {
+          // 父节点是左侧子节点
+          const uncle = grandParent.right
 
-        // 叔节点也是红色——只需要重新填色
-        if (uncle && uncle.color === Color.RED) {
-          grandParent.color = Color.RED
-          parent.color = Color.BLACK
-          uncle.color = Color.BLACK
-          node = grandParent
-        } else {
-          // 节点是右侧子节点-左旋转
-          if (node === parent.right) {
-            this.rotationRR(parent)
+          // 叔节点也是红色——只需要重新填色
+          if (uncle && uncle.color === Color.RED) {
+            grandParent.color = Color.RED
+            parent.color = Color.BLACK
+            uncle.color = Color.BLACK
+            node = grandParent
+          } else {
+            // 节点是右侧子节点-左旋转
+            if (node === parent.right) {
+              this.rotationRR(parent)
+              node = parent
+              parent = node.parent as RedBlackTreeNode<K>
+            }
+
+            // 节点是左侧子节点-右旋转
+            this.rotationLL(grandParent)
+            parent.color = Color.BLACK
+            grandParent.color = Color.RED
             node = parent
-            parent = node.parent
           }
-
-          // 节点是左侧子节点-右旋转
-          this.rotationLL(grandParent)
-          parent.color = Color.BLACK
-          grandParent.color = Color.RED
-          node = parent
-        }
-      } else {
-        // 父节点是右侧子节点
-        const uncle = grandParent.left
-
-        // 叔节点是右侧子节点
-        if (uncle && uncle.color === Color.RED) {
-          grandParent.color = Color.RED
-          parent.color = Color.BLACK
-          uncle.color = Color.BLACK
-          node = grandParent
         } else {
-          // 节点是左侧子节点-右旋转
-          if (node === parent.left) {
-            this.rotationLL(parent)
-            node = parent
-            parent = node.parent
-          }
+          // 父节点是右侧子节点
+          const uncle = grandParent.left
 
-          // 节点是右侧子节点-左旋转
-          this.rotationRR(grandParent)
-          parent.color = Color.BLACK
-          grandParent.color = Color.RED
-          node = parent
+          // 叔节点是右侧子节点
+          if (uncle && uncle.color === Color.RED) {
+            grandParent.color = Color.RED
+            parent.color = Color.BLACK
+            uncle.color = Color.BLACK
+            node = grandParent
+          } else {
+            // 节点是左侧子节点-右旋转
+            if (node === parent.left) {
+              this.rotationLL(parent)
+              node = parent
+              parent = node.parent as RedBlackTreeNode<K>
+            }
+
+            // 节点是右侧子节点-左旋转
+            this.rotationRR(grandParent)
+            parent.color = Color.BLACK
+            grandParent.color = Color.RED
+            node = parent
+          }
         }
       }
     }
@@ -439,53 +451,59 @@ class RedBlackTree extends AVLTree {
   }
 
   /* 左-左旋转（右旋转） */
-  rotationLL(node: RedBlackTreeNode): any {
+  rotationLL(node: RedBlackTreeNode<K>): any {
     const temp = node.left
-    node.left = temp.right
 
-    if (temp.right && temp.right.key) {
-      temp.right.parent = node
-    }
+    if (temp) {
+      node.left = temp.right
 
-    temp.parent = node.parent
-
-    if (!node.parent) {
-      this.root = temp
-    } else {
-      if (node === node.parent.left) {
-        node.parent.left = temp
-      } else {
-        node.parent.right = temp
+      if (temp.right && temp.right.key) {
+        temp.right.parent = node
       }
-    }
 
-    temp.right = node
-    node.parent = temp
+      temp.parent = node.parent
+
+      if (!node.parent) {
+        this.root = temp
+      } else {
+        if (node === node.parent.left) {
+          node.parent.left = temp
+        } else {
+          node.parent.right = temp
+        }
+      }
+
+      temp.right = node
+      node.parent = temp
+    }
   }
 
   /* 右-右旋转（左旋转） */
-  rotationRR(node: RedBlackTreeNode): any {
-    const tmp = node.right
-    node.right = tmp.left
+  rotationRR(node: RedBlackTreeNode<K>): any {
+    const temp = node.right
 
-    if (tmp.left && tmp.left.key) {
-      tmp.left.parent = node
-    }
+    if (temp) {
+      node.right = temp.left
 
-    tmp.parent = node.parent
-
-    if (!node.parent) {
-      this.root = tmp
-    } else {
-      if (node === node.parent.left) {
-        node.parent.left = tmp
-      } else {
-        node.parent.right = tmp
+      if (temp.left && temp.left.key) {
+        temp.left.parent = node
       }
-    }
 
-    tmp.left = node
-    node.parent = tmp
+      temp.parent = node.parent
+
+      if (!node.parent) {
+        this.root = temp
+      } else {
+        if (node === node.parent.left) {
+          node.parent.left = temp
+        } else {
+          node.parent.right = temp
+        }
+      }
+
+      temp.left = node
+      node.parent = temp
+    }
   }
 }
 
@@ -497,11 +515,11 @@ enum Color {
 /**
  * 红黑树节点类型
  */
-class RedBlackTreeNode extends TreeNode {
+class RedBlackTreeNode<K> extends TreeNode<K> {
   color: Color = Color.RED
-  parent: RedBlackTreeNode = null
-  left: RedBlackTreeNode
-  right: RedBlackTreeNode
+  parent: RedBlackTreeNode<K> | null = null
+  left: RedBlackTreeNode<K> | null
+  right: RedBlackTreeNode<K> | null
 
   isRed() {
     return this.color === Color.RED
