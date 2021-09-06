@@ -261,7 +261,7 @@ class HashMapSeparateChaining<K = any, V = any> extends HashMap {
  * 线性探查法（非惰性）解决散列冲突
  */
 class HashMapLinearProbing<K = any, V = any> extends HashMap {
-  table: { [key: string]: ValuePair<K, V> }
+  declare table: { [key: string]: ValuePair<K, V> }
   put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
