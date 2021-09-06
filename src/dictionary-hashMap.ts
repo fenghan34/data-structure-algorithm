@@ -56,7 +56,7 @@ class Dictionary<K = any, V = any> {
   }
 
   /* 从字典中检索一个值 */
-  get(key: K): V {
+  get(key: K): V | undefined {
     const valuePair = this.table[this.toStrFn(key)]
     return valuePair?.value || undefined
   }
@@ -220,7 +220,7 @@ class HashMapSeparateChaining<K = any, V = any> extends HashMap {
     return false
   }
 
-  get(key: K): V {
+  get(key: K): V | undefined {
     const pos = this.hashCode(key)
     const linkedList = this.table[pos]
 
@@ -279,7 +279,7 @@ class HashMapLinearProbing<K = any, V = any> extends HashMap {
     return false
   }
 
-  get(key: K): V {
+  get(key: K): V | undefined {
     const pos = this.hashCode(key)
     let valuePair = this.table[pos]
 

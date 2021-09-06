@@ -38,11 +38,11 @@ export class Graph<T = string> {
       this.addVertex(w)
     }
 
-    this.adjList.get(v).push(w)
+    this.adjList.get(v)!.push(w)
 
     if (!this.isDirected) {
       // 如果图是无向的
-      this.adjList.get(w).push(v)
+      this.adjList.get(w)!.push(v)
     }
   }
 
@@ -62,8 +62,8 @@ export class Graph<T = string> {
     for (let i = 0; i < this.vertices.length; i++) {
       s += `${this.vertices[i]} -> `
       const neighbors = this.adjList.get(this.vertices[i])
-      for (let j = 0; j < neighbors.length; j++) {
-        s += `${neighbors[j]} `
+      for (let j = 0; j < neighbors!.length; j++) {
+        s += `${neighbors![j]} `
       }
       s += '\n'
     }
@@ -101,7 +101,7 @@ export const breadthFirstSearch = <T>(
   graph: Graph<T>,
   startVertex: T,
   callback?: (vertex: T) => void
-): { distances: Map<T, number>; predecessors: Map<T, T> } => {
+): { distances: Map<T, number>; predecessors: Map<T, T | null> } => {
   // 所有顶点
   const vertices = graph.getVertices()
   // 邻接表
@@ -113,7 +113,7 @@ export const breadthFirstSearch = <T>(
   const distances = new Map<T, number>()
 
   // 记录前溯顶点
-  const predecessors = new Map<T, T>()
+  const predecessors = new Map<T, T | null>()
 
   // 初始化
   for (let i = 0; i < vertices.length; i++) {
@@ -135,15 +135,15 @@ export const breadthFirstSearch = <T>(
     colorMap.set(u, Colors.GREY)
 
     // 遍历所有相邻顶点
-    for (let i = 0; i < neighbors.length; i++) {
-      const w = neighbors[i]
+    for (let i = 0; i < neighbors!.length; i++) {
+      const w = neighbors![i]
 
       if (colorMap.get(w) === Colors.WHITE) {
         // 记录已为访问过
         colorMap.set(w, Colors.GREY)
 
         // 记录起始顶点与 w 的距离
-        distances.set(w, distances.get(u) + 1)
+        distances.set(w, distances.get(u)! + 1)
 
         // 记录 w 的前溯点为 u
         predecessors.set(w, u)
@@ -186,7 +186,7 @@ export const depthFirstSearch = <T>(
   // 记录每个顶点完成探索时间
   const f = new Map<T, number>()
   // 记录每个顶点的前溯点
-  const p = new Map<T, T>()
+  const p = new Map<T, T | null>()
 
   // 时间
   const time = { count: 0 }
@@ -217,7 +217,7 @@ export const depthFirstSearch = <T>(
     colorMap: Map<T, Colors>,
     d: Map<T, number>,
     f: Map<T, number>,
-    p: Map<T, T>,
+    p: Map<T, T | null>,
     time: { count: number },
     adjList: Dictionary<T, T[]>,
     callback?: (v: T) => void
@@ -233,8 +233,8 @@ export const depthFirstSearch = <T>(
     // 所有相邻顶点
     const neighbors = adjList.get(u)
 
-    for (let i = 0; i < neighbors.length; i++) {
-      const w = neighbors[i]
+    for (let i = 0; i < neighbors!.length; i++) {
+      const w = neighbors![i]
 
       if (colorMap.get(w) === Colors.WHITE) {
         // 记录前溯点

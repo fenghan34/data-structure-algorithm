@@ -7,7 +7,7 @@ interface LinkedListType {
   remove: (element: any) => NodeType
   isEmpty: () => boolean
   size: () => number
-  getHead: () => NodeType
+  getHead: () => NodeType | null | undefined
   getTail?: () => NodeType
   toString: () => string
 }
@@ -23,7 +23,7 @@ type NodeType = {
  */
 class LinkedList implements LinkedListType {
   protected count: number = 0
-  protected head: NodeType = null
+  protected head: NodeType | null | undefined = null
 
   /* 向尾部添加元素 */
   push(element: any) {
@@ -51,7 +51,7 @@ class LinkedList implements LinkedListType {
     if (index >= 0 && index <= this.count) {
       let current = this.head
       while (index--) {
-        current = current.next
+        current = current?.next
       }
 
       return current
@@ -67,15 +67,15 @@ class LinkedList implements LinkedListType {
 
       if (index === 0) {
         // 移除第一项
-        this.head = current.next
+        this.head = current?.next
       } else {
         const previous = this.getElementAt(index - 1)
-        current = previous.next
-        previous.next = current.next
+        current = previous?.next
+        previous!.next = current?.next
       }
 
       this.count--
-      return current.element
+      return current?.element
     }
 
     return undefined
@@ -92,8 +92,8 @@ class LinkedList implements LinkedListType {
         this.head = node
       } else {
         const previous = this.getElementAt(index - 1)
-        node.next = previous.next
-        previous.next = node
+        node.next = previous?.next
+        previous!.next = node
       }
 
       this.count++
@@ -143,7 +143,7 @@ class LinkedList implements LinkedListType {
     let current = this.head
     while (current) {
       str += current.element
-      current = current.next
+      current = current.next!
     }
 
     return str
@@ -155,7 +155,7 @@ class LinkedList implements LinkedListType {
  */
 class LinkedListNode implements NodeType {
   element: any
-  next: NodeType = null
+  next: NodeType | null | undefined = null
   constructor(element: any) {
     this.element = element
   }
@@ -165,14 +165,14 @@ class LinkedListNode implements NodeType {
  * 双向链表节点类
  */
 class DoublyLinkedListNode extends LinkedListNode {
-  prev: NodeType = null
+  prev: NodeType | null = null
 }
 
 /**
  * 双向链表类
  */
 class DoublyLinkedList extends LinkedList {
-  protected tail: NodeType = null
+  protected tail: NodeType | null | undefined = null
 
   /* 向尾部添加元素 */
   push(element: any) {
@@ -184,7 +184,7 @@ class DoublyLinkedList extends LinkedList {
       this.tail = node
     } else {
       // 非空链表
-      const current = this.tail
+      const current = this.tail as DoublyLinkedListNode
       current.next = node
       node.prev = current
       this.tail = node
@@ -207,7 +207,7 @@ class DoublyLinkedList extends LinkedList {
         let count = fromHead ? index : this.count - index - 1
 
         while (count--) {
-          current = current[fromHead ? 'next' : 'prev']
+          current = current![fromHead ? 'next' : 'prev']
         }
 
         return current
@@ -224,29 +224,29 @@ class DoublyLinkedList extends LinkedList {
 
       if (index === 0) {
         // 移除第一项
-        this.head = current.next
+        this.head = current?.next
 
         if (this.count === 1) {
           // 如果只有一项
           this.tail = null
         } else {
-          this.head.prev = null
+          this.head!.prev = null
         }
       } else if (index === this.count - 1) {
         // 移除最后一项
         current = this.tail
-        this.tail = current.prev
-        this.tail.next = null
+        this.tail = current?.prev
+        this.tail!.next = null
       } else {
         // 移除中间项
         current = this.getElementAt(index)
-        const previous = current.prev
-        previous.next = current.next
-        current.next.prev = previous
+        const previous = current?.prev
+        previous!.next = current?.next
+        current!.next!.prev = previous
       }
 
       this.count--
-      return current.element
+      return current?.element
     }
 
     return undefined
@@ -265,23 +265,23 @@ class DoublyLinkedList extends LinkedList {
           this.tail = node
         } else {
           node.next = current
-          current.prev = node
+          current!.prev = node
           this.head = node
         }
       } else if (index === this.count) {
         // 尾部插入
         current = this.tail
-        current.next = node
-        node.prev = current
+        current!.next = node
+        node.prev = current!
         this.tail = node
       } else {
         // 中间插入
         const previous = this.getElementAt(index - 1)
-        current = previous.next
-        previous.next = node
-        node.prev = previous
+        current = previous?.next
+        previous!.next = node
+        node.prev = previous!
         node.next = current
-        current.prev = node
+        current!.prev = node
       }
 
       this.count++
@@ -314,7 +314,7 @@ class CircularLinkedList extends LinkedList {
       let count = this.count
       let current = this.head
       while (--count) {
-        current = current.next
+        current = current.next!
       }
 
       current.next = node
@@ -338,12 +338,12 @@ class CircularLinkedList extends LinkedList {
           node.next = current
           this.head = node
           const tail = this.getElementAt(this.count - 1)
-          tail.next = this.head
+          tail!.next = this.head
         }
       } else {
         const previous = this.getElementAt(index - 1)
-        node.next = previous.next
-        previous.next = node
+        node.next = previous?.next
+        previous!.next = node
       }
 
       this.count++
@@ -364,17 +364,17 @@ class CircularLinkedList extends LinkedList {
           this.head = null
         } else {
           const tail = this.getElementAt(this.count - 1)
-          this.head = current.next
-          tail.next = this.head
+          this.head = current?.next
+          tail!.next = this.head
         }
       } else {
         const previous = this.getElementAt(index - 1)
-        current = previous.next
-        previous.next = current.next
+        current = previous?.next
+        previous!.next = current?.next
       }
 
       this.count--
-      return current.element
+      return current?.element
     }
 
     return undefined
@@ -436,7 +436,7 @@ class StackLinkedList {
   }
 
   peek() {
-    return this.items.getTail().element
+    return this.items.getTail()!.element
   }
 
   size() {
