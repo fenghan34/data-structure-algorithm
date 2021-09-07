@@ -38,8 +38,15 @@ export function swap<T>(array: T[], a: number, b: number) {
 }
 
 /**
- * 生成 0~10 随机数组
+ * 生成指定长度随机整数数组
  */
-export const genRandomArray = (length: number): number[] => {
-  return Array.from({ length }, () => ~~(Math.random() * 10))
+export const genRandomIntArray = (length: number, max = 100): number[] => {
+  return Array.from({ length }, () => genRandomInt(max))
+}
+
+/**
+ * 生成随机整数
+ */
+export const genRandomInt = (max: number) => {
+  return ~~(Math.random() * max)
 }
