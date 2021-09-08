@@ -352,7 +352,7 @@ class AVLTree<K> extends BinarySearchTree<K> {
  * 自平衡二叉搜索树-红黑树
  */
 class RedBlackTree<K> extends AVLTree<K> {
-  root: RedBlackTreeNode<K>
+  declare root: RedBlackTreeNode<K>
 
   /* 插入新节点 */
   insert(key: K): void {
@@ -518,8 +518,8 @@ enum Color {
 class RedBlackTreeNode<K> extends TreeNode<K> {
   color: Color = Color.RED
   parent: RedBlackTreeNode<K> | null = null
-  left: RedBlackTreeNode<K> | null
-  right: RedBlackTreeNode<K> | null
+  declare left: RedBlackTreeNode<K> | null
+  declare right: RedBlackTreeNode<K> | null
 
   isRed() {
     return this.color === Color.RED
