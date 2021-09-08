@@ -8,6 +8,10 @@ export interface CompareFn<T = number> {
   (param1: T, param2: T): Compare
 }
 
+export interface DiffFn<T = number> {
+  (param1: T, param2: T): number
+}
+
 /**
  * 对比函数
  */
@@ -17,6 +21,17 @@ export const defaultCompare = <T = number>(param1: T, param2: T) => {
     : param1 === param2
     ? Compare.EQUAL
     : Compare.BIGGER_THAN
+}
+
+/**
+ * 计算两数之差
+ * @returns 差值
+ */
+export const defaultDiff = <T = number>(param1: T, param2: T): number => {
+  if (typeof param1 === 'number' && typeof param2 === 'number') {
+    return param1 - param2
+  }
+  return Number(param1) - Number(param2)
 }
 
 /**
