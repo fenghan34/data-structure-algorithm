@@ -88,6 +88,32 @@ export const insertionSort = <T>(
 }
 
 /**
+ * 希尔排序 时间复杂度 O(nlog2(n)) 空间复杂度 O(1)
+ * @param array 排序数组
+ * @param compareFn 比较函数
+ */
+export const shellSort = <T>(
+  array: T[],
+  compareFn: CompareFn<T> = defaultCompare
+): T[] => {
+  for (let gap = array.length >> 1; gap > 0; gap >>= 1) {
+    for (let i = gap; i < array.length; i++) {
+      let temp = array[i]
+      let j = i - gap
+
+      while (j >= 0 && compareFn(array[j], temp) === Compare.BIGGER_THAN) {
+        array[j + gap] = array[j]
+        j -= gap
+      }
+
+      array[j + gap] = temp
+    }
+  }
+
+  return array
+}
+
+/**
  * 归并排序 时间复杂度 O(nlog(n)) 空间复杂度 O(n)
  * @param 排序数组
  * @param compareFn 比较函数
@@ -338,4 +364,61 @@ const countingSortForRadix = (
   }
 
   return aux
+}
+
+/**
+ * 堆排序算法 时间复杂度 O(nlog(n)) 空间复杂度 O(n)
+ * @param array 原数组
+ * @param compareFn 比较函数
+ */
+export const heapSort = <T>(
+  array: T[],
+  compareFn: CompareFn<T> = defaultCompare
+): T[] => {
+  let heapSize = array.length
+
+  // 构建最大堆
+  for (let i = ~~(array.length / 2); i >= 0; i--) {
+    heapify(array, i, array.length, compareFn)
+  }
+
+  while (heapSize > 1) {
+    swap(array, 0, --heapSize)
+    heapify(array, 0, heapSize, compareFn)
+  }
+
+  return array
+}
+
+/**
+ * 下移操作
+ */
+function heapify<T>(
+  array: T[],
+  index: number,
+  heapSize: number,
+  compareFn: CompareFn<T>
+) {
+  let element = index
+  const left = index * 2 + 1
+  const right = index * 2 + 2
+
+  if (
+    left < heapSize &&
+    compareFn(array[element], array[left]) === Compare.LESS_THAN
+  ) {
+    element = left
+  }
+
+  if (
+    right < heapSize &&
+    compareFn(array[element], array[right]) === Compare.LESS_THAN
+  ) {
+    element = right
+  }
+
+  if (index !== element) {
+    swap(array, index, element)
+    heapify(array, element, heapSize, compareFn)
+  }
 }
