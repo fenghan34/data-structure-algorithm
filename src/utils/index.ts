@@ -4,24 +4,27 @@ export enum Compare {
   BIGGER_THAN,
 }
 
-export interface CompareFn<T = number> {
-  (param1: T, param2: T): Compare
-}
+export type EqualsFn<T> = (a: T, b: T) => boolean
 
-export interface DiffFn<T = number> {
-  (param1: T, param2: T): number
-}
+export type CompareFn<T> = (a: T, b: T) => Compare
+
+export type DiffFn<T> = (a: T, b: T) => number
 
 /**
- * 对比函数
+ * 比较函数
  */
-export const defaultCompare = <T = number>(param1: T, param2: T) => {
+export const defaultCompare = <T = number>(param1: T, param2: T): Compare => {
   return param1 < param2
     ? Compare.LESS_THAN
     : param1 === param2
     ? Compare.EQUAL
     : Compare.BIGGER_THAN
 }
+
+/**
+ * 两个参数是否相等
+ */
+export const defaultEquals = <T>(a: T, b: T): boolean => a === b
 
 /**
  * 计算两数之差
@@ -64,4 +67,19 @@ export const genRandomIntArray = (length: number, max = 100): number[] => {
  */
 export const genRandomInt = (max: number) => {
   return ~~(Math.random() * max)
+}
+
+/**
+ * 转字符串
+ */
+export const defaultToString = (item: unknown): string => {
+  if (item === null) {
+    return 'NULL'
+  } else if (item === undefined) {
+    return 'UNDEFINED'
+  } else if (typeof item === 'string' || item instanceof String) {
+    return `${item}`
+  }
+
+  return item.toString()
 }
