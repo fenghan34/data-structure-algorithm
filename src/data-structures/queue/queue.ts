@@ -21,10 +21,12 @@ export class Queue<T> {
   }
 
   toString() {
+    if (this.size() === 0) return ''
+
     let str = this.items[this.lowestCount] + ''
 
     for (let i = this.lowestCount + 1; i < this.count; i++) {
-      str += this.items[i]
+      str += ',' + this.items[i]
     }
 
     return str
@@ -35,12 +37,12 @@ export class Queue<T> {
   }
 
   /** 入队 */
-  enQueue(element: T) {
+  enqueue(element: T) {
     this.items[this.count++] = element
   }
 
   /** 出队 */
-  deQueue() {
+  dequeue() {
     const item = this.items[this.lowestCount]
     delete this.items[this.lowestCount]
     this.lowestCount++
