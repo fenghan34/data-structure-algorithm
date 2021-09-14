@@ -11,13 +11,14 @@ export class LinkedListNode<T> {
  * 链表
  */
 export class LinkedList<T> {
-  protected count: number = 0
+  protected count = 0
+
   protected head?: LinkedListNode<T>
 
   constructor(protected equalsFn: EqualsFn<T> = defaultEquals) {}
 
   /** 向尾部添加元素 */
-  push(element: T) {
+  push(element: T): void {
     const node = new LinkedListNode(element)
 
     if (!this.head) {
@@ -38,11 +39,13 @@ export class LinkedList<T> {
   }
 
   /** 根据索引取出元素 */
-  getElementAt(index: number) {
-    if (index >= 0 && index <= this.count) {
+  getElementAt(index: number): LinkedListNode<T> | undefined {
+    let pos = index
+
+    if (pos >= 0 && pos <= this.count) {
       let current = this.head
 
-      while (index--) {
+      while (pos--) {
         current = current.next
       }
 
@@ -53,7 +56,7 @@ export class LinkedList<T> {
   }
 
   /** 根据索引移除元素 */
-  removeAt(index: number) {
+  removeAt(index: number): T | undefined {
     if (index >= 0 && index < this.count) {
       let current = this.head
 
@@ -74,7 +77,7 @@ export class LinkedList<T> {
   }
 
   /** 在任意位置插入元素 */
-  insert(element: T, index: number) {
+  insert(element: T, index: number): boolean {
     if (index >= 0 && index <= this.count) {
       const node = new LinkedListNode(element)
 
@@ -96,7 +99,7 @@ export class LinkedList<T> {
   }
 
   /** 返回元素在链表中的索引 */
-  indexOf(element: T) {
+  indexOf(element: T): number {
     let current = this.head
     let index = 0
     while (current) {
@@ -111,29 +114,29 @@ export class LinkedList<T> {
   }
 
   /** 从链表中删除一个元素 */
-  remove(element: T) {
+  remove(element: T): T {
     const index = this.indexOf(element)
     return this.removeAt(index)
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.count === 0
   }
 
-  size() {
+  size(): number {
     return this.count
   }
 
-  clear() {
+  clear(): void {
     this.head = undefined
     this.count = 0
   }
 
-  getHead() {
+  getHead(): LinkedListNode<T> {
     return this.head
   }
 
-  toString() {
+  toString(): string {
     if (!this.head) return ''
 
     let str = ''

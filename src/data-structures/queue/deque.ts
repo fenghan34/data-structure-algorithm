@@ -2,28 +2,30 @@
  * 双端队列
  */
 export class Deque<T> {
-  count: number = 0
-  lowestCount: number = 0
+  count = 0
+
+  lowestCount = 0
+
   items: Record<number, T> = {}
 
-  size() {
+  size(): number {
     return this.count - this.lowestCount
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.size() === 0
   }
 
-  clear() {
+  clear(): void {
     this.items = {}
     this.count = 0
     this.lowestCount = 0
   }
 
-  toString() {
+  toString(): string {
     if (this.isEmpty()) return ''
 
-    let str = this.items[this.lowestCount] + ''
+    let str = `${this.items[this.lowestCount]}`
 
     for (let i = this.lowestCount + 1; i < this.count; i++) {
       str += this.items[i]
@@ -32,7 +34,7 @@ export class Deque<T> {
     return str
   }
 
-  addFront(element: T) {
+  addFront(element: T): void {
     if (this.isEmpty()) {
       // 空队列
       this.addBack(element)
@@ -51,11 +53,11 @@ export class Deque<T> {
     }
   }
 
-  addBack(element: T) {
+  addBack(element: T): void {
     this.items[this.count++] = element
   }
 
-  removeFront() {
+  removeFront(): T | undefined {
     if (this.isEmpty()) return undefined
 
     const item = this.items[this.lowestCount]
@@ -64,7 +66,7 @@ export class Deque<T> {
     return item
   }
 
-  removeBack() {
+  removeBack(): T | undefined {
     if (this.isEmpty()) return undefined
 
     const item = this.items[this.count - 1]
@@ -73,12 +75,12 @@ export class Deque<T> {
     return item
   }
 
-  peekFront() {
+  peekFront(): T | undefined {
     if (this.isEmpty()) return undefined
     return this.items[this.lowestCount]
   }
 
-  peekBack() {
+  peekBack(): T | undefined {
     if (this.isEmpty()) return undefined
     return this.items[this.count - 1]
   }

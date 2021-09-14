@@ -9,24 +9,24 @@ export class MinHeap<T> {
   constructor(protected compareFn: CompareFn<T> = defaultCompare) {}
 
   /** 获取左侧子节点 index */
-  private getLeftIndex(index: number) {
+  private getLeftIndex(index: number): number {
     return 2 * index + 1
   }
 
   /** 获取右侧子节点 index */
-  private getRightIndex(index: number) {
+  private getRightIndex(index: number): number {
     return 2 * index + 2
   }
 
   /** 获取父节点 index */
-  private getParentIndex(index: number) {
+  private getParentIndex(index: number): number | undefined {
     if (index === 0) return undefined
 
     return ~~((index - 1) / 2)
   }
 
   /** 插入新值 */
-  insert(value: T) {
+  insert(value: T): boolean {
     if (value != null) {
       this.heap.push(value)
       this.siftUp(this.heap.length - 1)
@@ -36,7 +36,7 @@ export class MinHeap<T> {
   }
 
   /** 上移操作，直到不存在父节点大于插入的新值 */
-  private siftUp(index: number) {
+  private siftUp(index: number): void {
     let parentIndex = this.getParentIndex(index)
 
     while (
@@ -51,22 +51,22 @@ export class MinHeap<T> {
   }
 
   /** 堆大小 */
-  size() {
+  size(): number {
     return this.heap.length
   }
 
   /** 堆是否为空 */
-  isEmpty() {
+  isEmpty(): boolean {
     return this.size() === 0
   }
 
   /** 找出最小值 */
-  findMinimum() {
+  findMinimum(): T | undefined {
     return this.isEmpty() ? undefined : this.heap[0]
   }
 
   /** 移除最小值 */
-  extract() {
+  extract(): T | undefined {
     if (this.isEmpty()) {
       return undefined
     }
@@ -81,7 +81,7 @@ export class MinHeap<T> {
   }
 
   /** 下移操作（堆化） */
-  private siftDown(index: number) {
+  private siftDown(index: number): void {
     // 先找到最大值与最小值替换，再逐级往下比较进行替换操作，直至形成新的二叉堆
     let element = index
     const left = this.getLeftIndex(index)

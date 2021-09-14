@@ -12,7 +12,7 @@ export class SortedLinkedList<T> extends LinkedList<T> {
     super(equalsFn)
   }
 
-  push(element: T) {
+  push(element: T): void {
     if (this.isEmpty()) {
       super.push(element)
     } else {
@@ -21,7 +21,7 @@ export class SortedLinkedList<T> extends LinkedList<T> {
     }
   }
 
-  insert(element: T) {
+  insert(element: T): boolean {
     if (this.isEmpty()) {
       return super.insert(element, 0)
     }
@@ -31,7 +31,7 @@ export class SortedLinkedList<T> extends LinkedList<T> {
   }
 
   /** 获取排序后的插入位置 */
-  protected getIndexNextSortedElement(element: T) {
+  protected getIndexNextSortedElement(element: T): number {
     let current = this.head
     let index = 0
 

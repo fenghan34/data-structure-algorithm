@@ -10,7 +10,7 @@ export const bubbleSort = <T = number>(
   array: T[],
   compareFn: CompareFn<T> = defaultCompare
 ): T[] => {
-  const length = array.length
+  const { length } = array
 
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length - i - 1; j++) {

@@ -12,7 +12,7 @@ export const shellSort = <T>(
 ): T[] => {
   for (let gap = array.length >> 1; gap > 0; gap >>= 1) {
     for (let i = gap; i < array.length; i++) {
-      let temp = array[i]
+      const temp = array[i]
       let j = i - gap
 
       while (j >= 0 && compareFn(array[j], temp) === Compare.BIGGER_THAN) {

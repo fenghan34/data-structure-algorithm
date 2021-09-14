@@ -10,7 +10,7 @@ export class CircularLinkedList<T> extends LinkedList<T> {
   }
 
   /** 向尾部添加元素 */
-  push(element: T) {
+  push(element: T): void {
     const node = new LinkedListNode(element)
 
     if (!this.head) {
@@ -20,7 +20,7 @@ export class CircularLinkedList<T> extends LinkedList<T> {
     } else {
       // 非空链表
 
-      let count = this.count
+      let { count } = this
       let current = this.head
       while (--count) {
         current = current.next
@@ -34,7 +34,7 @@ export class CircularLinkedList<T> extends LinkedList<T> {
   }
 
   /** 在任意位置插入元素 */
-  insert(element: T, index: number) {
+  insert(element: T, index: number): boolean {
     if (index >= 0 && index <= this.count) {
       const node = new LinkedListNode(element)
 
@@ -63,7 +63,7 @@ export class CircularLinkedList<T> extends LinkedList<T> {
   }
 
   /** 根据索引移除元素 */
-  removeAt(index: number) {
+  removeAt(index: number): T | undefined {
     if (index >= 0 && index < this.count) {
       let current = this.head
 

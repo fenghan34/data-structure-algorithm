@@ -6,7 +6,7 @@ import { defaultToString } from '../../utils'
 export class ValuePair<K, V> {
   constructor(public key: K, public value: V) {}
 
-  toString() {
+  toString(): string {
     return `${this.key}:${this.value}`
   }
 }
@@ -20,12 +20,12 @@ export class Dictionary<K, V> {
   constructor(private toStrFn: (key: K) => string = defaultToString) {}
 
   /** 检测一个键是否存在于字典中 */
-  hasKey(key: K) {
+  hasKey(key: K): boolean {
     return this.table[this.toStrFn(key)] != null
   }
 
   /** 向字典中添加元素 */
-  set(key: K, value: V) {
+  set(key: K, value: V): boolean {
     if (key != null && value != null) {
       const tableKey: string = this.toStrFn(key)
       this.table[tableKey] = new ValuePair(key, value)
@@ -36,7 +36,7 @@ export class Dictionary<K, V> {
   }
 
   /** 从字典中移除一个值 */
-  remove(key: K) {
+  remove(key: K): boolean {
     if (this.hasKey(key)) {
       delete this.table[this.toStrFn(key)]
       return true
@@ -78,22 +78,22 @@ export class Dictionary<K, V> {
   }
 
   /** 获取字典大小 */
-  size() {
+  size(): number {
     return Object.keys(this.table).length
   }
 
   /** 检测字典是否为空字典 */
-  isEmpty() {
+  isEmpty(): boolean {
     return this.size() === 0
   }
 
   /** 清空字典 */
-  clear() {
+  clear(): void {
     this.table = {}
   }
 
   /** 字符串序列化 */
-  toString() {
+  toString(): string {
     if (this.isEmpty()) return ''
 
     const valuePairs = this.keyValues()

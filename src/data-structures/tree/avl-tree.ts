@@ -50,7 +50,7 @@ export class AVLTree<K> extends BinarySearchTree<K> {
   }
 
   /** 向 AVL 树插入节点 */
-  insert(key: K) {
+  insert(key: K): void {
     this.root = this.insertNode(this.root, key)
   }
 
@@ -99,7 +99,7 @@ export class AVLTree<K> extends BinarySearchTree<K> {
    *   c   d                           d   e
    *
    */
-  rotationLL(node: TreeNode<K>) {
+  rotationLL(node: TreeNode<K>): TreeNode<K> {
     const temp = node.left
     node.left = temp.right
     temp.right = node
@@ -115,8 +115,8 @@ export class AVLTree<K> extends BinarySearchTree<K> {
    *      / \                        / \
    *     d   e                      c   d
    *
-   *  */
-  rotationRR(node: TreeNode<K>) {
+   */
+  rotationRR(node: TreeNode<K>): TreeNode<K> {
     const temp = node.right
     node.right = temp.left
     temp.left = node
@@ -124,19 +124,19 @@ export class AVLTree<K> extends BinarySearchTree<K> {
   }
 
   /** LR 向右的双旋转 */
-  rotationLR(node: TreeNode<K>) {
+  rotationLR(node: TreeNode<K>): TreeNode<K> {
     node.left = this.rotationRR(node.left)
     return this.rotationLL(node)
   }
 
   /** RL 向左的双旋转 */
-  rotationRL(node: TreeNode<K>) {
+  rotationRL(node: TreeNode<K>): TreeNode<K> {
     node.right = this.rotationLL(node.right)
     return this.rotationRR(node)
   }
 
   /** 从 AVL 树中移除节点 */
-  protected removeNode(node: TreeNode<K>, key: K) {
+  protected removeNode(node: TreeNode<K>, key: K): TreeNode<K> {
     node = super.removeNode(node, key)
     if (!node) return node // null，不需要平衡
 

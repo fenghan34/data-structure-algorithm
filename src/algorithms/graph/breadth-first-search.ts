@@ -55,32 +55,32 @@ export const breadthFirstSearch = <T>(
   // 队列
   const queue = new Queue<T>()
 
-  queue.enQueue(startVertex)
+  queue.enqueue(startVertex)
 
   while (!queue.isEmpty()) {
     // 取出顶点
-    const u = queue.deQueue()
+    const u = queue.dequeue()
     // 相邻顶点
     const neighbors = adjList.get(u)
     // 记录已被访问过
     colorMap.set(u, Colors.GREY)
 
     // 遍历所有相邻顶点
-    for (let i = 0; i < neighbors!.length; i++) {
-      const w = neighbors![i]
+    for (let i = 0; i < neighbors.length; i++) {
+      const w = neighbors[i]
 
       if (colorMap.get(w) === Colors.WHITE) {
         // 记录已为访问过
         colorMap.set(w, Colors.GREY)
 
         // 记录起始顶点与 w 的距离
-        distances.set(w, distances.get(u)! + 1)
+        distances.set(w, distances.get(u) + 1)
 
         // 记录 w 的前溯点为 u
         predecessors.set(w, u)
 
         // 入队
-        queue.enQueue(w)
+        queue.enqueue(w)
       }
     }
 
@@ -88,7 +88,9 @@ export const breadthFirstSearch = <T>(
     colorMap.set(u, Colors.BLACK)
 
     // 执行回调
-    typeof callback === 'function' && callback(u)
+    if (typeof callback === 'function') {
+      callback(u)
+    }
   }
 
   return {

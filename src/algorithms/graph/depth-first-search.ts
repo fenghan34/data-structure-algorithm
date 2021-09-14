@@ -2,6 +2,51 @@ import { Dictionary } from '../../data-structures/dictionary/dictionary'
 import { Graph } from '../../data-structures/graph/graph'
 import { Colors, initializeColor } from './breadth-first-search'
 
+interface DepthFirstSearchResult<T> {
+  discovery: Map<T, number>
+  finished: Map<T, number>
+  predecessors: Map<T, T | null>
+}
+
+function depthFirstSearchVisit<T>(
+  u: T,
+  colorMap: Map<T, Colors>,
+  d: Map<T, number>,
+  f: Map<T, number>,
+  p: Map<T, T | null>,
+  time: { count: number },
+  adjList: Dictionary<T, T[]>,
+  callback?: (v: T) => void
+): void {
+  // 记录为已被访问过
+  colorMap.set(u, Colors.GREY)
+
+  // 记录访问时间
+  d.set(u, ++time.count)
+
+  if (typeof callback === 'function') {
+    callback(u)
+  }
+
+  // 所有相邻顶点
+  const neighbors = adjList.get(u)
+
+  for (let i = 0; i < neighbors.length; i++) {
+    const w = neighbors[i]
+
+    if (colorMap.get(w) === Colors.WHITE) {
+      // 记录前溯点
+      p.set(w, u)
+
+      depthFirstSearchVisit(w, colorMap, d, f, p, time, adjList, callback)
+    }
+  }
+
+  colorMap.set(u, Colors.BLACK)
+
+  f.set(u, ++time.count)
+}
+
 /**
  * 深度优先搜索算法
  * @param graph 图实例
@@ -11,7 +56,7 @@ import { Colors, initializeColor } from './breadth-first-search'
 export const depthFirstSearch = <T>(
   graph: Graph<T>,
   callback?: (vertex: T) => void
-) => {
+): DepthFirstSearchResult<T> => {
   // 所有顶点
   const vertices = graph.getVertices()
   // 邻接表
@@ -47,43 +92,6 @@ export const depthFirstSearch = <T>(
         callback
       )
     }
-  }
-
-  function depthFirstSearchVisit(
-    u: T,
-    colorMap: Map<T, Colors>,
-    d: Map<T, number>,
-    f: Map<T, number>,
-    p: Map<T, T | null>,
-    time: { count: number },
-    adjList: Dictionary<T, T[]>,
-    callback?: (v: T) => void
-  ) {
-    // 记录为已被访问过
-    colorMap.set(u, Colors.GREY)
-
-    // 记录访问时间
-    d.set(u, ++time.count)
-
-    typeof callback === 'function' && callback(u)
-
-    // 所有相邻顶点
-    const neighbors = adjList.get(u)
-
-    for (let i = 0; i < neighbors!.length; i++) {
-      const w = neighbors![i]
-
-      if (colorMap.get(w) === Colors.WHITE) {
-        // 记录前溯点
-        p.set(w, u)
-
-        depthFirstSearchVisit(w, colorMap, d, f, p, time, adjList, callback)
-      }
-    }
-
-    colorMap.set(u, Colors.BLACK)
-
-    f.set(u, ++time.count)
   }
 
   return {

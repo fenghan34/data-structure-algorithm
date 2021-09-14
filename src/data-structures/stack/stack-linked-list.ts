@@ -10,11 +10,11 @@ export class StackLinkedList<T> {
     this.items = new DoublyLinkedList<T>()
   }
 
-  push(element: any) {
+  push(element: T): void {
     this.items.push(element)
   }
 
-  pop() {
+  pop(): T | undefined {
     if (this.isEmpty()) {
       return undefined
     }
@@ -22,15 +22,15 @@ export class StackLinkedList<T> {
     return this.items.removeAt(this.size() - 1)
   }
 
-  peek() {
+  peek(): T {
     return this.items.getTail().element
   }
 
-  size() {
+  size(): number {
     return this.items.size()
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.items.isEmpty()
   }
 }

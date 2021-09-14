@@ -14,8 +14,11 @@ export enum Colors {
  */
 export class RedBlackTreeNode<K> extends TreeNode<K> {
   declare left: RedBlackTreeNode<K>
+
   declare right: RedBlackTreeNode<K>
+
   parent: RedBlackTreeNode<K>
+
   color: Colors
 
   constructor(public key: K) {
@@ -23,11 +26,11 @@ export class RedBlackTreeNode<K> extends TreeNode<K> {
     this.color = Colors.RED
   }
 
-  isRed() {
+  isRed(): boolean {
     return this.color === Colors.RED
   }
 
-  flipColor() {
+  flipColor(): void {
     if (this.color === Colors.RED) {
       this.color = Colors.BLACK
     } else {
@@ -47,7 +50,7 @@ export class RedBlackTree<K> extends BinarySearchTree<K> {
   }
 
   /** 插入新节点 */
-  insert(key: K) {
+  insert(key: K): void {
     if (!this.root) {
       this.root = new RedBlackTreeNode(key)
       this.root.color = Colors.BLACK
@@ -63,27 +66,26 @@ export class RedBlackTree<K> extends BinarySearchTree<K> {
         node.left = new RedBlackTreeNode(key)
         node.left.parent = node
         return node.left
-      } else {
-        return this.insertNode(node.left, key)
       }
-    } else if (node.right == null) {
+      return this.insertNode(node.left, key)
+    }
+    if (node.right == null) {
       node.right = new RedBlackTreeNode(key)
       node.right.parent = node
       return node.right
-    } else {
-      return this.insertNode(node.right, key)
     }
+    return this.insertNode(node.right, key)
   }
 
   /** 插入节点后验证红黑树属性 */
-  protected fixTreeProperties(node: RedBlackTreeNode<K>) {
+  protected fixTreeProperties(node: RedBlackTreeNode<K>): void {
     while (
       node &&
       node.parent &&
       node.parent.isRed() &&
       node.color !== Colors.BLACK
     ) {
-      let parent = node.parent
+      let { parent } = node
       const grandParent = parent.parent
 
       if (grandParent) {
@@ -152,7 +154,7 @@ export class RedBlackTree<K> extends BinarySearchTree<K> {
    *   c   d                           d   e
    *
    */
-  rotationLL(node: RedBlackTreeNode<K>): any {
+  rotationLL(node: RedBlackTreeNode<K>): void {
     const temp = node.left
 
     if (temp) {
@@ -166,12 +168,10 @@ export class RedBlackTree<K> extends BinarySearchTree<K> {
 
       if (!node.parent) {
         this.root = temp
+      } else if (node === node.parent.left) {
+        node.parent.left = temp
       } else {
-        if (node === node.parent.left) {
-          node.parent.left = temp
-        } else {
-          node.parent.right = temp
-        }
+        node.parent.right = temp
       }
 
       temp.right = node
@@ -189,7 +189,7 @@ export class RedBlackTree<K> extends BinarySearchTree<K> {
    *     d   e                      c   d
    *
    */
-  rotationRR(node: RedBlackTreeNode<K>): any {
+  rotationRR(node: RedBlackTreeNode<K>): void {
     const temp = node.right
 
     if (temp) {
@@ -203,12 +203,10 @@ export class RedBlackTree<K> extends BinarySearchTree<K> {
 
       if (!node.parent) {
         this.root = temp
+      } else if (node === node.parent.left) {
+        node.parent.left = temp
       } else {
-        if (node === node.parent.left) {
-          node.parent.left = temp
-        } else {
-          node.parent.right = temp
-        }
+        node.parent.right = temp
       }
 
       temp.left = node

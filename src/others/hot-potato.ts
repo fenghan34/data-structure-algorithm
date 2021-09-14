@@ -14,19 +14,19 @@ export const hotPotato = (
   const outList = []
 
   for (let i = 0; i < list.length; i++) {
-    queue.enQueue(list[i])
+    queue.enqueue(list[i])
   }
 
   while (queue.size() > 1) {
     for (let j = 0; j < num; j++) {
-      queue.enQueue(queue.deQueue())
+      queue.enqueue(queue.dequeue())
     }
 
-    outList.push(queue.deQueue())
+    outList.push(queue.dequeue())
   }
 
   return {
     outList,
-    winner: queue.deQueue(),
+    winner: queue.dequeue(),
   }
 }

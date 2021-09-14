@@ -10,7 +10,7 @@ export class HashMapSeparateChaining<K, V> {
 
   constructor(protected toStrFn: (key: K) => string = defaultToString) {}
 
-  private loseloseHashCode(key: K) {
+  private loseloseHashCode(key: K): number {
     if (typeof key === 'number') {
       return key
     }
@@ -22,11 +22,11 @@ export class HashMapSeparateChaining<K, V> {
     return hash % 37
   }
 
-  hashCode(key: K) {
+  hashCode(key: K): number {
     return this.loseloseHashCode(key)
   }
 
-  put(key: K, value: V) {
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
 
@@ -57,7 +57,7 @@ export class HashMapSeparateChaining<K, V> {
     return undefined
   }
 
-  remove(key: K) {
+  remove(key: K): boolean {
     const pos = this.hashCode(key)
     const linkedList = this.table[pos]
 
@@ -78,27 +78,28 @@ export class HashMapSeparateChaining<K, V> {
     return false
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.size() === 0
   }
 
-  size() {
+  size(): number {
     let count = 0
-    Object.values(this.table).forEach(
-      (linkedList) => (count += linkedList.size())
-    )
+    Object.values(this.table).forEach((linkedList) => {
+      count += linkedList.size()
+    })
+
     return count
   }
 
-  clear() {
+  clear(): void {
     this.table = {}
   }
 
-  getTable() {
+  getTable(): { [key: string]: LinkedList<ValuePair<K, V>> } {
     return this.table
   }
 
-  toString() {
+  toString(): string {
     if (this.isEmpty()) {
       return ''
     }

@@ -2,7 +2,7 @@
  * 集合
  */
 export class Set<T> {
-  protected items: any
+  protected items: unknown
 
   constructor(iterable?: Iterable<T>) {
     this.items = {}
@@ -17,7 +17,7 @@ export class Set<T> {
     return yield* this.values()
   }
 
-  add(element: T) {
+  add(element: T): boolean {
     if (!this.has(element)) {
       this.items[element] = element
       return true
@@ -26,11 +26,11 @@ export class Set<T> {
     return false
   }
 
-  has(element: T) {
+  has(element: T): boolean {
     return Object.prototype.hasOwnProperty.call(this.items, element)
   }
 
-  delete(element: T) {
+  delete(element: T): boolean {
     if (this.has(element)) {
       delete this.items[element]
       return true
@@ -39,11 +39,11 @@ export class Set<T> {
     return false
   }
 
-  clear() {
+  clear(): void {
     this.items = {}
   }
 
-  get size() {
+  get size(): number {
     return Object.keys(this.items).length
   }
 
@@ -59,7 +59,7 @@ export class Set<T> {
     return Object.entries(this.items)
   }
 
-  toString() {
+  toString(): string {
     if (this.size === 0) {
       return ''
     }
@@ -75,12 +75,12 @@ export class Set<T> {
   }
 
   /** 计算与另一个集合的并集 */
-  union(otherSet: Set<T>) {
+  union(otherSet: Set<T>): Set<T> {
     return new Set<T>([...this, ...otherSet])
   }
 
   /** 计算与另一个集合的交集 */
-  intersection(otherSet: Set<T>) {
+  intersection(otherSet: Set<T>): Set<T> {
     let smallerSet = otherSet
     let biggerSet: Set<T> = this
 
@@ -93,7 +93,7 @@ export class Set<T> {
   }
 
   /** 计算与另一个集合的差集 */
-  difference(otherSet: Set<T>) {
+  difference(otherSet: Set<T>): Set<T> {
     return new Set([...this].filter((v) => !otherSet.has(v)))
   }
 

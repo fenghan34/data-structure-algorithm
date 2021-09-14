@@ -3,22 +3,23 @@
  */
 export class Stack<E> {
   private items: Record<number, E> = {}
-  private count: number = 0
 
-  size() {
+  private count = 0
+
+  size(): number {
     return this.count
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.size() === 0
   }
 
-  clear() {
+  clear(): void {
     this.items = {}
     this.count = 0
   }
 
-  toString() {
+  toString(): string {
     if (this.isEmpty()) return ''
 
     let str = ''
@@ -30,11 +31,11 @@ export class Stack<E> {
     return str
   }
 
-  push(element: E) {
+  push(element: E): void {
     this.items[this.count++] = element
   }
 
-  pop() {
+  pop(): E | undefined {
     if (this.isEmpty()) return undefined
 
     this.count--
@@ -43,7 +44,7 @@ export class Stack<E> {
     return item
   }
 
-  peek() {
+  peek(): E | undefined {
     if (this.isEmpty()) return undefined
     return this.items[this.count - 1]
   }

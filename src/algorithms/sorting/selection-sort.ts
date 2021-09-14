@@ -10,7 +10,7 @@ export const selectionSort = <T>(
   array: T[],
   compareFn: CompareFn<T> = defaultCompare
 ): T[] => {
-  const length = array.length
+  const { length } = array
   let minIndex: number
 
   for (let i = 0; i < length - 1; i++) {

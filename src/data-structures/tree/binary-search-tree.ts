@@ -5,11 +5,12 @@ import { Compare, CompareFn, defaultCompare } from '../../utils'
  */
 export class TreeNode<K> {
   left: TreeNode<K>
+
   right: TreeNode<K>
 
   constructor(public key: K) {}
 
-  toString() {
+  toString(): string {
     return `${this.key}`
   }
 }
@@ -23,7 +24,7 @@ export class BinarySearchTree<K> {
   constructor(protected compareFn: CompareFn<K> = defaultCompare) {}
 
   /** 向二叉搜索树插入一个键 */
-  insert(key: K) {
+  insert(key: K): void {
     if (!this.root) {
       this.root = new TreeNode(key)
     } else {
@@ -31,7 +32,7 @@ export class BinarySearchTree<K> {
     }
   }
 
-  protected insertNode(node: TreeNode<K>, key: K) {
+  protected insertNode(node: TreeNode<K>, key: K): void {
     if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
       // 新节点键小于当前节点键
       if (!node.left) {
@@ -50,13 +51,13 @@ export class BinarySearchTree<K> {
   }
 
   /** 中序遍历，按从小到大顺序遍历 */
-  inOrderTraverse(callback: Function) {
+  inOrderTraverse(callback: (key: K) => void): void {
     this.inOrderTraverseNode(this.root, callback)
   }
 
   protected inOrderTraverseNode(
-    node: TreeNode<K> | null,
-    callback: Function
+    node: TreeNode<K>,
+    callback: (key: K) => void
   ): void {
     if (node) {
       this.inOrderTraverseNode(node.left, callback)
@@ -66,13 +67,13 @@ export class BinarySearchTree<K> {
   }
 
   /** 先序遍历，按优先后代节点顺序遍历 */
-  preOrderTraverse(callback: Function): void {
+  preOrderTraverse(callback: (key: K) => void): void {
     this.preOrderTraverseNode(this.root, callback)
   }
 
   protected preOrderTraverseNode(
-    node: TreeNode<K> | null,
-    callback: Function
+    node: TreeNode<K>,
+    callback: (key: K) => void
   ): void {
     if (node) {
       callback(node.key)
@@ -82,11 +83,11 @@ export class BinarySearchTree<K> {
   }
 
   /** 后序遍历，先访问节点的后代节点，再访问节点本身 */
-  postOrderTraverse(callback: Function): void {
+  postOrderTraverse(callback: (key: K) => void): void {
     this.postOrderTraverseNode(this.root, callback)
   }
 
-  postOrderTraverseNode(node: TreeNode<K> | null, callback: Function): void {
+  postOrderTraverseNode(node: TreeNode<K>, callback: (key: K) => void): void {
     if (node) {
       this.postOrderTraverseNode(node.left, callback)
       this.postOrderTraverseNode(node.right, callback)
@@ -95,11 +96,11 @@ export class BinarySearchTree<K> {
   }
 
   /** 最小键，沿着树左边寻找 */
-  min(): unknown {
+  min(): K {
     return this.minNode(this.root)?.key
   }
 
-  protected minNode(node: TreeNode<K> | null): TreeNode<K> | null {
+  protected minNode(node: TreeNode<K>): TreeNode<K> {
     let current = node
 
     while (current && current.left) {
@@ -110,11 +111,11 @@ export class BinarySearchTree<K> {
   }
 
   /** 最大键，沿着树右边寻找 */
-  max(): unknown {
+  max(): K {
     return this.maxNode(this.root)?.key
   }
 
-  protected maxNode(node: TreeNode<K> | null): TreeNode<K> | null {
+  protected maxNode(node: TreeNode<K>): TreeNode<K> {
     let current = node
 
     while (current && current.right) {
@@ -136,9 +137,13 @@ export class BinarySearchTree<K> {
 
     if (compareRes === Compare.LESS_THAN) {
       return this.searchNode(node.left, key)
-    } else if (compareRes === Compare.BIGGER_THAN) {
+    }
+
+    if (compareRes === Compare.BIGGER_THAN) {
       return this.searchNode(node.right, key)
-    } else return false
+    }
+
+    return false
   }
 
   /** 移除一个节点 */
@@ -146,7 +151,7 @@ export class BinarySearchTree<K> {
     this.root = this.removeNode(this.root, key)
   }
 
-  protected removeNode(node: TreeNode<K> | null, key: K): TreeNode<K> | null {
+  protected removeNode(node: TreeNode<K>, key: K): TreeNode<K> {
     if (!node) return null
 
     const compareRes = this.compareFn(key, node.key)
@@ -154,35 +159,35 @@ export class BinarySearchTree<K> {
     if (compareRes === Compare.LESS_THAN) {
       node.left = this.removeNode(node.left, key)
       return node
-    } else if (compareRes === Compare.BIGGER_THAN) {
+    }
+    if (compareRes === Compare.BIGGER_THAN) {
       node.right = this.removeNode(node.right, key)
       return node
-    } else {
-      // 找到需要移除的键
+    }
+    // 找到需要移除的键
 
-      if (!node.left && !node.right) {
-        // 不存在左右侧子节点
-        node = null
-        return node
-      }
-
-      if (!node.left) {
-        // 只有右侧子节点
-        node = node.right
-        return node
-      }
-
-      if (!node.right) {
-        // 只有左侧子节点
-        node = node.left
-        return node
-      }
-
-      // 左右侧子节点都有
-      const aux = this.minNode(node.right) as TreeNode<K> // 找到右侧子树最小的节点
-      node.key = aux.key // 用右侧子树中最小节点的键去更新这个节点的值
-      node.right = this.removeNode(node.right, aux.key) // 移除右侧子树中的最小节点
+    if (!node.left && !node.right) {
+      // 不存在左右侧子节点
+      node = null
       return node
     }
+
+    if (!node.left) {
+      // 只有右侧子节点
+      node = node.right
+      return node
+    }
+
+    if (!node.right) {
+      // 只有左侧子节点
+      node = node.left
+      return node
+    }
+
+    // 左右侧子节点都有
+    const aux = this.minNode(node.right) as TreeNode<K> // 找到右侧子树最小的节点
+    node.key = aux.key // 用右侧子树中最小节点的键去更新这个节点的值
+    node.right = this.removeNode(node.right, aux.key) // 移除右侧子树中的最小节点
+    return node
   }
 }

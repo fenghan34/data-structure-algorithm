@@ -19,6 +19,7 @@ export class DoublyLinkedListNode<T> extends LinkedListNode<T> {
  */
 export class DoublyLinkedList<T> extends LinkedList<T> {
   protected head?: DoublyLinkedListNode<T> = undefined
+
   protected tail?: DoublyLinkedListNode<T>
 
   constructor(protected equalsFn: EqualsFn<T> = defaultEquals) {
@@ -26,7 +27,7 @@ export class DoublyLinkedList<T> extends LinkedList<T> {
   }
 
   /** 向尾部添加元素 */
-  push(element: T) {
+  push(element: T): void {
     const node = new DoublyLinkedListNode(element)
 
     if (!this.head) {
@@ -45,7 +46,7 @@ export class DoublyLinkedList<T> extends LinkedList<T> {
   }
 
   /** 根据索引移除元素 */
-  removeAt(index: number) {
+  removeAt(index: number): T | undefined {
     if (index >= 0 && index < this.count) {
       let current = this.head
 
@@ -80,7 +81,7 @@ export class DoublyLinkedList<T> extends LinkedList<T> {
   }
 
   /** 在任意位置插入元素 */
-  insert(element: T, index: number) {
+  insert(element: T, index: number): boolean {
     if (index >= 0 && index <= this.count) {
       const node = new DoublyLinkedListNode(element)
       let current = this.head
@@ -118,16 +119,16 @@ export class DoublyLinkedList<T> extends LinkedList<T> {
     return false
   }
 
-  getTail() {
+  getTail(): DoublyLinkedListNode<T> {
     return this.tail
   }
 
-  clear() {
+  clear(): void {
     super.clear()
     this.tail = undefined
   }
 
-  inverseToString() {
+  inverseToString(): string {
     if (this.tail == null) {
       return ''
     }

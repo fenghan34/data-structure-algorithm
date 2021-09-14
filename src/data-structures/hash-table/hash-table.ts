@@ -10,7 +10,7 @@ export class HashTable<K, V> {
   constructor(private toStrFn: (key: K) => string = defaultToString) {}
 
   /** 散列函数 */
-  private loseloseHashCode(key: K) {
+  private loseloseHashCode(key: K): number {
     if (typeof key === 'number') {
       return key
     }
@@ -25,12 +25,12 @@ export class HashTable<K, V> {
     return hash % 37
   }
 
-  hashCode(key: K) {
+  hashCode(key: K): number {
     return this.loseloseHashCode(key)
   }
 
   /** 将键和值加入散列表 */
-  put(key: K, value: V) {
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
       this.table[pos] = new ValuePair(key, value)
@@ -42,13 +42,13 @@ export class HashTable<K, V> {
   }
 
   /** 从散列表中获取一个值 */
-  get(key: K) {
+  get(key: K): V {
     const valuePair = this.table[this.hashCode(key)]
     return valuePair?.value
   }
 
   /** 从散列表中移除一个值 */
-  remove(key: K) {
+  remove(key: K): boolean {
     const hash = this.hashCode(key)
     const valuePair = this.table[hash]
 
@@ -61,7 +61,7 @@ export class HashTable<K, V> {
   }
 
   /** 字符串序列化 */
-  toString() {
+  toString(): string {
     const keys = Object.keys(this.table)
     if (keys.length === 0) return ''
 

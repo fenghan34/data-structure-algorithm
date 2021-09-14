@@ -9,7 +9,7 @@ export class HashMapLinearProbing<K, V> {
 
   constructor(protected toStrFn: (key: K) => string = defaultToString) {}
 
-  private loseloseHashCode(key: K) {
+  private loseloseHashCode(key: K): number {
     if (typeof key === 'number') {
       return key
     }
@@ -21,11 +21,11 @@ export class HashMapLinearProbing<K, V> {
     return hash % 37
   }
 
-  hashCode(key: K) {
+  hashCode(key: K): number {
     return this.loseloseHashCode(key)
   }
 
-  put(key: K, value: V) {
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
       if (!this.table[pos]) {
@@ -63,7 +63,7 @@ export class HashMapLinearProbing<K, V> {
     return undefined
   }
 
-  remove(key: K) {
+  remove(key: K): boolean {
     const pos = this.hashCode(key)
     let valuePair = this.table[pos]
     if (valuePair) {
@@ -90,7 +90,7 @@ export class HashMapLinearProbing<K, V> {
     return false
   }
 
-  private verifyRemoveSideEffect(key: K, removedPosition: number) {
+  private verifyRemoveSideEffect(key: K, removedPosition: number): void {
     const hash = this.hashCode(key)
     let index = removedPosition + 1
 
@@ -106,34 +106,36 @@ export class HashMapLinearProbing<K, V> {
     }
   }
 
-  isEmpty() {
+  isEmpty(): boolean {
     return this.size() === 0
   }
 
-  size() {
+  size(): number {
     return Object.keys(this.table).length
   }
 
-  clear() {
+  clear(): void {
     this.table = {}
   }
 
-  getTable() {
+  getTable(): { [key: string]: ValuePair<K, V> } {
     return this.table
   }
 
-  toString() {
+  toString(): string {
     if (this.isEmpty()) {
       return ''
     }
 
     const keys = Object.keys(this.table)
     let objString = `{${keys[0]} => ${this.table[keys[0]].toString()}}`
+
     for (let i = 1; i < keys.length; i++) {
       objString = `${objString},{${keys[i]} => ${this.table[
         keys[i]
       ].toString()}}`
     }
+
     return objString
   }
 }

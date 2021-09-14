@@ -17,7 +17,7 @@ export const insertionSort = <T>(
   // 5.将新元素插入到该位置后
   // 6.重复步骤 2~5
 
-  const length = array.length
+  const { length } = array
   let temp: T
 
   for (let i = 1; i < length; i++) {

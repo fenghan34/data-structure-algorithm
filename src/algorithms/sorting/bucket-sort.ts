@@ -6,7 +6,7 @@ import { swap } from '../../utils'
  * @param num 桶数量
  * @returns 排序后的数组
  */
-export const bucketSort = (array: number[], num: number) => {
+export const bucketSort = (array: number[], num: number): number[] => {
   const max = Math.max(...array)
   const min = Math.min(...array)
 

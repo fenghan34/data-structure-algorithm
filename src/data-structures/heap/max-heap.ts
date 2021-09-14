@@ -1,7 +1,7 @@
 import { CompareFn, defaultCompare, reverseCompare } from '../../utils'
 import { MinHeap } from './min-heap'
 
-/***
+/**
  * 最大堆
  */
 export class MaxHeap<T> extends MinHeap<T> {

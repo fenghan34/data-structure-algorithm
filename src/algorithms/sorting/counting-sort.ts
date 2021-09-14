@@ -9,7 +9,12 @@ export const countingSort = (array: number[]): number[] => {
   const counts = []
   for (let i = 0; i < array.length; i++) {
     const element = array[i]
-    counts[element] >= 1 ? counts[element]++ : (counts[element] = 1)
+
+    if (counts[element] >= 1) {
+      counts[element]++
+    } else {
+      counts[element] = 1
+    }
   }
 
   let index = 0
