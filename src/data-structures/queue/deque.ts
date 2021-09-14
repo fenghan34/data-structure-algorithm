@@ -2,11 +2,11 @@
  * 双端队列
  */
 export class Deque<T> {
-  count = 0
+  private count = 0
 
-  lowestCount = 0
+  private lowestCount = 0
 
-  items: Record<number, T> = {}
+  private items: Record<number, T> = {}
 
   size(): number {
     return this.count - this.lowestCount
@@ -28,7 +28,7 @@ export class Deque<T> {
     let str = `${this.items[this.lowestCount]}`
 
     for (let i = this.lowestCount + 1; i < this.count; i++) {
-      str += this.items[i]
+      str += `,${this.items[i]}`
     }
 
     return str
