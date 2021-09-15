@@ -139,10 +139,11 @@ export class LinkedList<T> {
   toString(): string {
     if (!this.head) return ''
 
-    let str = ''
     let current = this.head
-    while (current) {
-      str += current.element
+    let str = `${current.element}`
+
+    while (current.next) {
+      str += `,${current.next.element}`
       current = current.next
     }
 
