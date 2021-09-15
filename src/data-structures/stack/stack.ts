@@ -22,10 +22,10 @@ export class Stack<E> {
   toString(): string {
     if (this.isEmpty()) return ''
 
-    let str = ''
+    let str = `${this.items[0]}`
 
-    for (let i = 0; i < this.count; i++) {
-      str += this.items[i]
+    for (let i = 1; i < this.count; i++) {
+      str += `,${this.items[i]}`
     }
 
     return str
