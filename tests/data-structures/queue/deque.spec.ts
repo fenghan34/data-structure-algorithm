@@ -1,18 +1,13 @@
 import { Deque } from '@/data-structures/queue/deque'
 
-describe('Dequeue', () => {
+describe('Deque', () => {
   let deque: Deque<number>
 
   beforeEach(() => {
     deque = new Deque<number>()
   })
 
-  test('starts empty', () => {
-    expect(deque.size()).toBe(0)
-    expect(deque.isEmpty()).toBeTruthy()
-  })
-
-  test('add element in the back', () => {
+  test('add element to the end of the deque', () => {
     deque.addBack(1)
     deque.addBack(2)
 
@@ -20,7 +15,7 @@ describe('Dequeue', () => {
     expect(deque.size()).toBe(2)
   })
 
-  test('add element in the front', () => {
+  test('add element to the start of the deque', () => {
     deque.addFront(1)
     deque.addFront(2)
 
@@ -28,7 +23,7 @@ describe('Dequeue', () => {
     expect(deque.size()).toBe(2)
   })
 
-  test('remove element in the back', () => {
+  test('remove element from the end of the deque', () => {
     deque.addBack(1)
     deque.addBack(2)
     deque.addFront(0)
@@ -39,7 +34,7 @@ describe('Dequeue', () => {
     expect(deque.removeBack()).toBeUndefined()
   })
 
-  test('remove element in the front', () => {
+  test('remove element from the start of the deque', () => {
     deque.addFront(1)
     deque.addFront(2)
     deque.addBack(0)
@@ -52,7 +47,7 @@ describe('Dequeue', () => {
     expect(deque.removeFront()).toBeUndefined()
   })
 
-  test('allows to peek at the front element in the deque without removing it', () => {
+  test('peek element from the start of the deque', () => {
     expect(deque.peekFront()).toBeUndefined()
 
     deque.addFront(1)
@@ -65,7 +60,7 @@ describe('Dequeue', () => {
     expect(deque.peekFront()).toBe(-1)
   })
 
-  test('allows to peek at the last element in the deque without removing it', () => {
+  test('peek element from the end of the deque', () => {
     expect(deque.peekBack()).toBeUndefined()
 
     deque.addFront(1)
@@ -78,7 +73,7 @@ describe('Dequeue', () => {
     expect(deque.peekBack()).toBe(3)
   })
 
-  it('returns the correct size', () => {
+  it('return the deque size', () => {
     expect(deque.size()).toBe(0)
 
     deque.addFront(1)
@@ -106,7 +101,7 @@ describe('Dequeue', () => {
     expect(deque.size()).toBe(0)
   })
 
-  it('returns if it is empty', () => {
+  it('return if the deque is empty', () => {
     expect(deque.isEmpty()).toBeTruthy()
 
     deque.addFront(1)
@@ -127,7 +122,7 @@ describe('Dequeue', () => {
     expect(deque.isEmpty()).toBeTruthy()
   })
 
-  it('clears the queue', () => {
+  it('clear the deque', () => {
     deque.clear()
     expect(deque.isEmpty()).toBeTruthy()
 
@@ -139,7 +134,7 @@ describe('Dequeue', () => {
     expect(deque.isEmpty()).toBeTruthy()
   })
 
-  it('returns toString primitive types', () => {
+  it('return primitive string type', () => {
     expect(deque.toString()).toBe('')
 
     deque.addFront(1)

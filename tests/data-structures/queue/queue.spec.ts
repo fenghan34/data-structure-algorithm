@@ -7,7 +7,7 @@ describe('Queue', () => {
     queue = new Queue<number>()
   })
 
-  test('enqueues elements', () => {
+  test('enqueue element', () => {
     queue.enqueue(1)
     expect(queue.size()).toBe(1)
 
@@ -20,7 +20,7 @@ describe('Queue', () => {
     expect(queue.isEmpty()).toBeFalsy()
   })
 
-  test('dequeues elements', () => {
+  test('dequeue element', () => {
     queue.enqueue(1)
     queue.enqueue(2)
     queue.enqueue(3)
@@ -31,7 +31,7 @@ describe('Queue', () => {
     expect(queue.dequeue()).toBeUndefined()
   })
 
-  test('implements FIFO logic', () => {
+  test('verify FIFO logic', () => {
     queue.enqueue(1)
     expect(queue.peek()).toBe(1)
     queue.enqueue(2)
@@ -45,7 +45,7 @@ describe('Queue', () => {
     expect(queue.dequeue()).toBeUndefined()
   })
 
-  test('allows to peek at the front element in the queue without dequeuing it', () => {
+  test('peek element', () => {
     expect(queue.peek()).toBeUndefined()
 
     queue.enqueue(1)
@@ -58,7 +58,7 @@ describe('Queue', () => {
     expect(queue.peek()).toBe(2)
   })
 
-  test('returns the correct size', () => {
+  test('return the queue size', () => {
     expect(queue.size()).toBe(0)
     queue.enqueue(1)
     expect(queue.size()).toBe(1)
@@ -78,7 +78,7 @@ describe('Queue', () => {
     expect(queue.size()).toBe(0)
   })
 
-  test('returns if it is empty', () => {
+  test('return if the queue is empty', () => {
     expect(queue.isEmpty()).toBeTruthy()
     queue.enqueue(1)
     expect(queue.isEmpty()).toBeFalsy()
@@ -98,7 +98,7 @@ describe('Queue', () => {
     expect(queue.isEmpty()).toBeTruthy()
   })
 
-  test('clears the queue', () => {
+  test('clear the queue', () => {
     queue.clear()
     expect(queue.isEmpty()).toBeTruthy()
 
@@ -110,7 +110,7 @@ describe('Queue', () => {
     expect(queue.isEmpty()).toBeTruthy()
   })
 
-  test('returns toString primitive types', () => {
+  test('return primitive string type', () => {
     expect(queue.toString()).toBe('')
 
     queue.enqueue(1)
