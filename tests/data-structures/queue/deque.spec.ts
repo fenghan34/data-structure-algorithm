@@ -21,6 +21,11 @@ describe('Deque', () => {
 
     expect(deque.peekFront()).toBe(2)
     expect(deque.size()).toBe(2)
+
+    deque.removeFront()
+    deque.addFront(3)
+    expect(deque.peekFront()).toBe(3)
+    expect(deque.size()).toBe(2)
   })
 
   test('remove element from the end of the deque', () => {

@@ -1,5 +1,4 @@
 import { LinkedList } from '@/data-structures/linked-list/linked-list'
-import { defaultEquals } from '@/utils'
 
 describe('LinkedList', () => {
   let list: LinkedList<number>
@@ -7,7 +6,7 @@ describe('LinkedList', () => {
   let end: number
 
   beforeEach(() => {
-    list = new LinkedList<number>(defaultEquals)
+    list = new LinkedList<number>()
     start = 1
     end = 3
   })
