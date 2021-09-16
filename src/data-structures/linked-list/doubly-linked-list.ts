@@ -45,6 +45,11 @@ export class DoublyLinkedList<T> extends LinkedList<T> {
     this.count++
   }
 
+  /** 根据索引取出节点 */
+  getElementAt(index: number): DoublyLinkedListNode<T> | undefined {
+    return super.getElementAt(index)
+  }
+
   /** 根据索引移除元素 */
   removeAt(index: number): T | undefined {
     if (index >= 0 && index < this.count) {
@@ -119,6 +124,10 @@ export class DoublyLinkedList<T> extends LinkedList<T> {
     return false
   }
 
+  getHead(): DoublyLinkedListNode<T> {
+    return this.head
+  }
+
   getTail(): DoublyLinkedListNode<T> {
     return this.tail
   }
@@ -129,15 +138,16 @@ export class DoublyLinkedList<T> extends LinkedList<T> {
   }
 
   inverseToString(): string {
-    if (this.tail == null) {
-      return ''
-    }
+    if (this.tail == null) return ''
+
     let objString = `${this.tail.element}`
     let previous = this.tail.prev
+
     while (previous != null) {
       objString = `${objString},${previous.element}`
       previous = previous.prev
     }
+
     return objString
   }
 }
