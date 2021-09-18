@@ -1,4 +1,10 @@
-import { CompareFn, defaultCompare, defaultEquals, EqualsFn } from '../../utils'
+import {
+  Compare,
+  CompareFn,
+  defaultCompare,
+  defaultEquals,
+  EqualsFn,
+} from '../../utils'
 import { LinkedList } from './linked-list'
 
 /**
@@ -31,11 +37,14 @@ export class SortedLinkedList<T> extends LinkedList<T> {
   }
 
   /** 获取排序后的插入位置 */
-  protected getIndexNextSortedElement(element: T): number {
+  private getIndexNextSortedElement(element: T): number {
     let current = this.head
     let index = 0
 
-    while (current && this.compareFn(element, current.element) === 1) {
+    while (
+      current &&
+      this.compareFn(element, current.element) === Compare.BIGGER_THAN
+    ) {
       current = current.next
       index++
     }
