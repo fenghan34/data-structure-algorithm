@@ -144,6 +144,8 @@ describe('DoublyLinkedList', () => {
   })
 
   test('return reversed primitive string type', () => {
+    expect(list.inverseToString()).toBe('')
+
     list.push(1)
     expect(list.inverseToString()).toBe('1')
 
