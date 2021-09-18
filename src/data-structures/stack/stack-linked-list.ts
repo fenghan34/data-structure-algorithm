@@ -1,4 +1,5 @@
 import { DoublyLinkedList } from '../linked-list/doubly-linked-list'
+import { defaultEquals, EqualsFn } from '@/utils'
 
 /**
  * 使用链表实现栈
@@ -6,8 +7,8 @@ import { DoublyLinkedList } from '../linked-list/doubly-linked-list'
 export class StackLinkedList<T> {
   private items: DoublyLinkedList<T>
 
-  constructor() {
-    this.items = new DoublyLinkedList<T>()
+  constructor(private equalsFn: EqualsFn<T> = defaultEquals) {
+    this.items = new DoublyLinkedList<T>(equalsFn)
   }
 
   push(element: T): void {
@@ -23,7 +24,7 @@ export class StackLinkedList<T> {
   }
 
   peek(): T {
-    return this.items.getTail().element
+    return this.items.getTail()?.element
   }
 
   size(): number {
@@ -32,5 +33,13 @@ export class StackLinkedList<T> {
 
   isEmpty(): boolean {
     return this.items.isEmpty()
+  }
+
+  clear(): void {
+    this.items = new DoublyLinkedList<T>()
+  }
+
+  toString(): string {
+    return this.items.toString()
   }
 }
