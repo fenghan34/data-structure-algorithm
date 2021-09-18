@@ -43,10 +43,10 @@ export class CircularLinkedList<T> extends LinkedList<T> {
           this.head = node
           node.next = this.head
         } else {
+          const tail = this.getElementAt(this.count - 1)
           const current = this.head
           node.next = current
           this.head = node
-          const tail = this.getElementAt(this.count - 1)
           tail.next = this.head
         }
       } else {
