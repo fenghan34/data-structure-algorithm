@@ -100,7 +100,7 @@ export class Dictionary<K, V> {
     let str = `${valuePairs[0].toString()}`
 
     for (let i = 1; i < valuePairs.length; i++) {
-      str += `${valuePairs[i].toString()}`
+      str += `,${valuePairs[i].toString()}`
     }
 
     return str
