@@ -7,13 +7,16 @@ export class Set<T> {
   constructor(iterable?: Iterable<T>) {
     this.items = {}
 
-    if (iterable[Symbol.iterator]) {
+    if (
+      typeof iterable === 'object' &&
+      typeof iterable[Symbol.iterator] === 'function'
+    ) {
       Array.from(iterable).forEach((v: T) => this.add(v))
     }
   }
 
   /** 迭代协议 */
-  *[Symbol.iterator](): Iterator<T> {
+  *[Symbol.iterator](): Iterator<T, T> {
     return yield* this.values()
   }
 
