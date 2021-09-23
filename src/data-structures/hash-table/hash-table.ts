@@ -42,7 +42,7 @@ export class HashTable<K, V> {
   put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
-      this.table[pos] = new ValuePair(key, value) as unknown as TableValue<K, V>
+      this.table[pos] = new ValuePair(key, value) as TableValue<K, V>
       this.count++
 
       return true

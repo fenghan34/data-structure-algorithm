@@ -19,7 +19,7 @@ export class HashMapSeparateChaining<K, V> extends HashTable<K, V> {
 
       if (!this.table[pos]) {
         // 散列表的每一个位置都是一个链表
-        this.table[pos] = new LinkedList() as unknown as TableValue<K, V>
+        this.table[pos] = new LinkedList() as TableValue<K, V>
       }
 
       this.table[pos].push(new ValuePair(key, value))
