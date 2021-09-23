@@ -1,29 +1,16 @@
 import { defaultToString } from '../../utils'
 import { ValuePair } from '../dictionary/dictionary'
 import { LinkedList } from '../linked-list/linked-list'
+import { HashTable, Table, TableValue } from './hash-table'
 
 /**
  * 分离链接法解决散列冲突
  */
-export class HashMapSeparateChaining<K, V> {
-  protected table: { [key: string]: LinkedList<ValuePair<K, V>> } = {}
+export class HashMapSeparateChaining<K, V> extends HashTable<K, V> {
+  protected table: Table<K, V> = {}
 
-  constructor(protected toStrFn: (key: K) => string = defaultToString) {}
-
-  private loseloseHashCode(key: K): number {
-    if (typeof key === 'number') {
-      return key
-    }
-    const tableKey = this.toStrFn(key)
-    let hash = 0
-    for (let i = 0; i < tableKey.length; i++) {
-      hash += tableKey.charCodeAt(i)
-    }
-    return hash % 37
-  }
-
-  hashCode(key: K): number {
-    return this.loseloseHashCode(key)
+  constructor(protected toStrFn: (key: K) => string = defaultToString) {
+    super(toStrFn)
   }
 
   put(key: K, value: V): boolean {
@@ -32,25 +19,31 @@ export class HashMapSeparateChaining<K, V> {
 
       if (!this.table[pos]) {
         // 散列表的每一个位置都是一个链表
-        this.table[pos] = new LinkedList()
+        this.table[pos] = new LinkedList() as unknown as TableValue<K, V>
       }
 
       this.table[pos].push(new ValuePair(key, value))
+
+      this.count++
+
       return true
     }
+
     return false
   }
 
-  get(key: K): V {
+  get(key: K): V | undefined {
     const pos = this.hashCode(key)
     const linkedList = this.table[pos]
 
     if (linkedList && !linkedList.isEmpty()) {
       let current = linkedList.getHead()
+
       while (current) {
         if (current.element.key === key) {
           return current.element.value
         }
+
         current = current.next
       }
     }
@@ -63,53 +56,24 @@ export class HashMapSeparateChaining<K, V> {
 
     if (linkedList && !linkedList.isEmpty()) {
       let current = linkedList.getHead()
+
       while (current) {
         if (current.element.key === key) {
           linkedList.remove(current.element)
+
           if (linkedList.isEmpty()) {
             delete this.table[pos]
           }
+
+          this.count--
+
           return true
         }
+
         current = current.next
       }
     }
 
     return false
-  }
-
-  isEmpty(): boolean {
-    return this.size() === 0
-  }
-
-  size(): number {
-    let count = 0
-    Object.values(this.table).forEach((linkedList) => {
-      count += linkedList.size()
-    })
-
-    return count
-  }
-
-  clear(): void {
-    this.table = {}
-  }
-
-  getTable(): { [key: string]: LinkedList<ValuePair<K, V>> } {
-    return this.table
-  }
-
-  toString(): string {
-    if (this.isEmpty()) {
-      return ''
-    }
-    const keys = Object.keys(this.table)
-    let objString = `{${keys[0]} => ${this.table[keys[0]].toString()}}`
-    for (let i = 1; i < keys.length; i++) {
-      objString = `${objString},{${keys[i]} => ${this.table[
-        keys[i]
-      ].toString()}}`
-    }
-    return objString
   }
 }
