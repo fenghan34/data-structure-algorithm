@@ -1,16 +1,25 @@
 import { defaultToString } from '../../utils'
 import { ValuePair } from '../dictionary/dictionary'
+import { LinkedList } from '../linked-list/linked-list'
+
+export type TableValue<K, V> = ValuePair<K, V> & LinkedList<ValuePair<K, V>>
+
+export interface Table<K, V> {
+  [key: string]: TableValue<K, V>
+}
 
 /**
  * 散列表
  */
 export class HashTable<K, V> {
-  private table: { [key: string]: ValuePair<K, V> } = {}
+  protected table: Table<K, V> = {}
 
-  constructor(private toStrFn: (key: K) => string = defaultToString) {}
+  protected count = 0
+
+  constructor(protected toStrFn: (key: K) => string = defaultToString) {}
 
   /** 散列函数 */
-  private loseloseHashCode(key: K): number {
+  protected loseloseHashCode(key: K): number {
     if (typeof key === 'number') {
       return key
     }
@@ -33,7 +42,8 @@ export class HashTable<K, V> {
   put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const pos = this.hashCode(key)
-      this.table[pos] = new ValuePair(key, value)
+      this.table[pos] = new ValuePair(key, value) as unknown as TableValue<K, V>
+      this.count++
 
       return true
     }
@@ -54,21 +64,39 @@ export class HashTable<K, V> {
 
     if (valuePair) {
       delete this.table[hash]
+      this.count--
       return true
     }
 
     return false
   }
 
+  getTable(): Table<K, V> {
+    return this.table
+  }
+
+  isEmpty(): boolean {
+    return this.size() === 0
+  }
+
+  size(): number {
+    return this.count
+  }
+
+  clear(): void {
+    this.table = {}
+    this.count = 0
+  }
+
   /** 字符串序列化 */
   toString(): string {
-    const keys = Object.keys(this.table)
-    if (keys.length === 0) return ''
+    if (this.isEmpty()) return ''
 
+    const keys = Object.keys(this.table)
     let str = `${keys[0]} => ${this.table[keys[0]].toString()}`
 
     for (let i = 1; i < keys.length; i++) {
-      str += `\n${keys[i]} => ${this.table[keys[i]].toString()}`
+      str += `,${keys[i]} => ${this.table[keys[i]].toString()}`
     }
 
     return str
