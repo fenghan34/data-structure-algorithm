@@ -9,10 +9,6 @@ export class TreeNode<K> {
   right: TreeNode<K>
 
   constructor(public key: K) {}
-
-  toString(): string {
-    return `${this.key}`
-  }
 }
 
 /**
@@ -87,12 +83,19 @@ export class BinarySearchTree<K> {
     this.postOrderTraverseNode(this.root, callback)
   }
 
-  postOrderTraverseNode(node: TreeNode<K>, callback: (key: K) => void): void {
+  protected postOrderTraverseNode(
+    node: TreeNode<K>,
+    callback: (key: K) => void
+  ): void {
     if (node) {
       this.postOrderTraverseNode(node.left, callback)
       this.postOrderTraverseNode(node.right, callback)
       callback(node.key)
     }
+  }
+
+  getRoot(): TreeNode<K> {
+    return this.root
   }
 
   /** 最小键，沿着树左边寻找 */
@@ -143,7 +146,7 @@ export class BinarySearchTree<K> {
       return this.searchNode(node.right, key)
     }
 
-    return false
+    return true
   }
 
   /** 移除一个节点 */
@@ -152,7 +155,7 @@ export class BinarySearchTree<K> {
   }
 
   protected removeNode(node: TreeNode<K>, key: K): TreeNode<K> {
-    if (!node) return null
+    if (!node) return undefined
 
     const compareRes = this.compareFn(key, node.key)
 
@@ -160,11 +163,11 @@ export class BinarySearchTree<K> {
       node.left = this.removeNode(node.left, key)
       return node
     }
+
     if (compareRes === Compare.BIGGER_THAN) {
       node.right = this.removeNode(node.right, key)
       return node
     }
-    // 找到需要移除的键
 
     if (!node.left && !node.right) {
       // 不存在左右侧子节点
