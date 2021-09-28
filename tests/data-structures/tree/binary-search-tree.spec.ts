@@ -33,22 +33,33 @@ describe('BinarySearchTree', () => {
     expect(tree.search(4)).toBeFalsy()
     expect(tree.search(5)).toBeTruthy()
     expect(tree.search(18)).toBeTruthy()
+    expect(tree.search(0)).toBeFalsy()
   })
 
   test('remove key', () => {
+    expect(tree.getRoot()).toBeUndefined()
+    tree.remove(2)
+    expect(tree.getRoot()).toBeUndefined()
+
     insertNodes()
+    const root = tree.getRoot()
+
+    expect(root.left.left.key).toBe(5)
     tree.remove(6)
     expect(tree.search(6)).toBeFalsy()
-    tree.remove(3)
-    expect(tree.search(3)).toBeFalsy()
     tree.remove(5)
     expect(tree.search(5)).toBeFalsy()
+    expect(root.left.left.key).toBe(3)
+
+    expect(root.left.right.key).toBe(9)
     tree.remove(8)
     expect(tree.search(8)).toBeFalsy()
-    tree.remove(10)
-    expect(tree.search(10)).toBeFalsy()
+    tree.remove(9)
+    expect(tree.search(9)).toBeFalsy()
+    expect(root.left.right.key).toBe(10)
+
     tree.remove(15)
-    expect(tree.search(15)).toBeFalsy()
+    expect(root.right.key).toBe(18)
   })
 
   test('inOrderTraverse', () => {
@@ -95,5 +106,11 @@ describe('BinarySearchTree', () => {
     expect(tree.max()).toBe(25)
     tree.insert(30)
     expect(tree.max()).toBe(30)
+  })
+
+  test('return root node', () => {
+    expect(tree.getRoot()).toBeUndefined()
+    tree.insert(1)
+    expect(tree.getRoot().key).toBe(1)
   })
 })
