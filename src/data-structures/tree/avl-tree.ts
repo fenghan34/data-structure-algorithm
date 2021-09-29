@@ -5,11 +5,11 @@ import { BinarySearchTree, TreeNode } from './binary-search-tree'
  * 平衡因子
  */
 enum BalanceFactor {
-  UNBALANCED_RIGHT = 1,
-  SLIGHTLY_UNBALANCED_RIGHT = 2,
-  BALANCED = 3,
-  SLIGHTLY_UNBALANCED_LEFT = 4,
-  UNBALANCED_LEFT = 5,
+  UNBALANCED_RIGHT,
+  SLIGHTLY_UNBALANCED_RIGHT,
+  BALANCED,
+  SLIGHTLY_UNBALANCED_LEFT,
+  UNBALANCED_LEFT,
 }
 
 /**
@@ -123,13 +123,13 @@ export class AVLTree<K> extends BinarySearchTree<K> {
     return temp
   }
 
-  /** LR 向右的双旋转 */
+  /** LR 先向左单旋转，再向右单旋转 */
   rotationLR(node: TreeNode<K>): TreeNode<K> {
     node.left = this.rotationRR(node.left)
     return this.rotationLL(node)
   }
 
-  /** RL 向左的双旋转 */
+  /** RL 先向右单旋转，再向左单旋转 */
   rotationRL(node: TreeNode<K>): TreeNode<K> {
     node.right = this.rotationLL(node.right)
     return this.rotationRR(node)
@@ -138,13 +138,15 @@ export class AVLTree<K> extends BinarySearchTree<K> {
   /** 从 AVL 树中移除节点 */
   protected removeNode(node: TreeNode<K>, key: K): TreeNode<K> {
     node = super.removeNode(node, key)
-    if (!node) return node // null，不需要平衡
+
+    if (!node) return node // 不需要平衡
 
     // 检测树是否平衡
     const balanceFactor = this.getBalanceFactor(node)
 
     if (balanceFactor === BalanceFactor.UNBALANCED_LEFT) {
       const balanceFactorLeft = this.getBalanceFactor(node.left)
+
       if (
         balanceFactorLeft === BalanceFactor.BALANCED ||
         balanceFactorLeft === BalanceFactor.SLIGHTLY_UNBALANCED_LEFT
@@ -153,12 +155,13 @@ export class AVLTree<K> extends BinarySearchTree<K> {
       }
 
       if (balanceFactorLeft === BalanceFactor.SLIGHTLY_UNBALANCED_RIGHT) {
-        return this.rotationLR(node.left as TreeNode<K>)
+        return this.rotationLR(node.left)
       }
     }
 
     if (balanceFactor === BalanceFactor.UNBALANCED_RIGHT) {
       const balanceFactorRight = this.getBalanceFactor(node.right)
+
       if (
         balanceFactorRight === BalanceFactor.BALANCED ||
         balanceFactorRight === BalanceFactor.SLIGHTLY_UNBALANCED_RIGHT
@@ -167,7 +170,7 @@ export class AVLTree<K> extends BinarySearchTree<K> {
       }
 
       if (balanceFactorRight === BalanceFactor.SLIGHTLY_UNBALANCED_LEFT) {
-        return this.rotationRL(node.left as TreeNode<K>)
+        return this.rotationRL(node.right)
       }
     }
 
