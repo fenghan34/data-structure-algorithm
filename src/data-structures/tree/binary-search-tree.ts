@@ -188,7 +188,7 @@ export class BinarySearchTree<K> {
     }
 
     // 左右侧子节点都有
-    const aux = this.minNode(node.right) as TreeNode<K> // 找到右侧子树最小的节点
+    const aux = this.minNode(node.right) // 找到右侧子树最小的节点
     node.key = aux.key // 用右侧子树中最小节点的键去更新这个节点的值
     node.right = this.removeNode(node.right, aux.key) // 移除右侧子树中的最小节点
     return node
