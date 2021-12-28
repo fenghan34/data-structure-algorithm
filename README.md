@@ -1,3 +1,4 @@
-# Data Structures and Algorithms
+# 数据结构与算法
 
-数据结构与算法学习记录
+![ci](https://github.com/fenghan34/data-structure-algorithm/actions/workflows/ci.yaml/badge.svg?branch=main)
+![coverage](./badges/coverage-jest%20coverage.svg)

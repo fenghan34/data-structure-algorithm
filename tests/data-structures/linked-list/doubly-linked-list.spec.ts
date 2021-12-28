@@ -1,4 +1,4 @@
-import { DoublyLinkedList } from '@/data-structures/linked-list/doubly-linked-list'
+import { DoublyLinkedList } from '@/data-structures'
 
 describe('DoublyLinkedList', () => {
   let list: DoublyLinkedList<number>

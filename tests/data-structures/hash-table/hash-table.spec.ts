@@ -1,5 +1,4 @@
-import { ValuePair } from '@/data-structures/dictionary/dictionary'
-import { HashTable } from '@/data-structures/hash-table/hash-table'
+import { ValuePair, HashTable } from '@/data-structures'
 
 describe('HashTable', () => {
   let hashTable: HashTable<number | string, string>

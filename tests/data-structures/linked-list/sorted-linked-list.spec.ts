@@ -1,4 +1,4 @@
-import { SortedLinkedList } from '@/data-structures/linked-list/sorted-linked-list'
+import { SortedLinkedList } from '@/data-structures'
 
 describe('SortedLinkedList', () => {
   let list: SortedLinkedList<number>

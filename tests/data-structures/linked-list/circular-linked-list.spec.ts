@@ -1,4 +1,4 @@
-import { CircularLinkedList } from '@/data-structures/linked-list/circular-linked-list'
+import { CircularLinkedList } from '@/data-structures'
 
 describe('CircularLinkedList', () => {
   let list: CircularLinkedList<number>

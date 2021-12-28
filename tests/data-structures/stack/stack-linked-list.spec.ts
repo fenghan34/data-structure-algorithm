@@ -1,4 +1,4 @@
-import { StackLinkedList } from '@/data-structures/stack/stack-linked-list'
+import { StackLinkedList } from '@/data-structures'
 
 describe('StackLinkedList', () => {
   let stack: StackLinkedList<number>

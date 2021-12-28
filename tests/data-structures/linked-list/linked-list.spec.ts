@@ -1,4 +1,4 @@
-import { LinkedList } from '@/data-structures/linked-list/linked-list'
+import { LinkedList } from '@/data-structures'
 
 describe('LinkedList', () => {
   let list: LinkedList<number>

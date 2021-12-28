@@ -1,19 +1,26 @@
 {
-  "private": true,
+  "name": "@fenghan/data-structure-algorithm",
+  "version": "0.0.0",
+  "private": false,
+  "repository": "https://github.com/fenghan34/data-structure-algorithm.git",
   "license": "MIT",
-  "author": "Feng Han <fenghan770@gmail.com>",
+  "author": "Feng Han <hi@fenghan.link>",
+  "main": "index.js",
+  "files": [
+    "out"
+  ],
   "scripts": {
-    "lint": "eslint **/*.ts",
-    "format": "prettier --write --ignore-unknown **/*",
+    "build": "tsup",
+    "format": "prettier . -w -u --loglevel=error",
+    "lint": "eslint . --fix --ext .ts",
     "test": "jest",
-    "coverage": "jest --coverage",
     "prepare": "husky install"
   },
-  "prettier": "@fenghan/prettier-config",
   "lint-staged": {
-    "*.ts": "eslint --fix",
-    "**/*": "prettier --write --ignore-unknown"
+    "*.ts": "eslint",
+    "**/*": "prettier -w -u"
   },
+  "prettier": "@fenghan/prettier-config",
   "devDependencies": {
     "@fenghan/eslint-config-ts": "^1.0.4",
     "@fenghan/prettier-config": "^1.0.5",
@@ -25,6 +32,13 @@
     "lint-staged": "^11.1.2",
     "prettier": "^2.4.0",
     "ts-jest": "^27.0.5",
+    "tsup": "^5.11.9",
     "typescript": "^4.4.3"
+  },
+  "engines": {
+    "node": ">=14.16.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

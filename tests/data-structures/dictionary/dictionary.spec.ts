@@ -1,4 +1,4 @@
-import { Dictionary, ValuePair } from '@/data-structures/dictionary/dictionary'
+import { Dictionary, ValuePair } from '@/data-structures'
 
 describe('Dictionary', () => {
   let dictionary: Dictionary<number, number>

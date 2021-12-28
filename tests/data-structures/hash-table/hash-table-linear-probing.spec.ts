@@ -1,4 +1,4 @@
-import { HashMapLinearProbing } from '@/data-structures/hash-table/hash-table-linear-probing'
+import { HashMapLinearProbing } from '@/data-structures'
 
 describe('HashTableLinearProbing', () => {
   let hashTable: HashMapLinearProbing<string | number, string>

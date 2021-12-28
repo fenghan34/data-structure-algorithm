@@ -1,4 +1,4 @@
-import { MinHeap } from '@/data-structures/heap/min-heap'
+import { MinHeap } from '@/data-structures'
 
 describe('MinHeap', () => {
   let heap: MinHeap<number>

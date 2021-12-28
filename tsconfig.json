@@ -4,12 +4,11 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "outDir": "out",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "module": "commonjs",
-    "target": "esnext",
-    "allowJs": true
+    "lib": ["ESNext"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": false
   },
   "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules"]

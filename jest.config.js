@@ -10,6 +10,8 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
 
+  collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
+  coverageReporters: ['text', 'json-summary'],
 }
