@@ -15,5 +15,6 @@ module.exports = {
   rules: {
     'import/no-unresolved': [2, { ignore: ['^@'] }],
     'import/extensions': [2, 'never'],
+    'import/no-extraneous-dependencies': 'off',
   },
 }

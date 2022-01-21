@@ -13,8 +13,8 @@
     "build": "tsup",
     "format": "prettier . -w -u --loglevel=error",
     "lint": "eslint . --fix --ext .ts",
-    "test": "jest --watchAll --watch",
-    "test:cov": "jest --coverage",
+    "test": "jest --watch",
+    "test:cov": "jest --watchAll --coverage",
     "ci": "jest --ci --coverage",
     "prepare": "husky install"
   },

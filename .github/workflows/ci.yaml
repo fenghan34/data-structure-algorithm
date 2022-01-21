@@ -25,7 +25,7 @@ jobs:
       - run: pnpm install
 
       - name: Run unit tests
-        run: pnpm run test
+        run: pnpm run ci
 
       - name: Generate coverage badge
         uses: jpb06/jest-badges-action@latest
