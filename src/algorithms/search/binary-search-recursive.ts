@@ -1,5 +1,4 @@
 import { Compare, CompareFn, defaultCompare } from '../../utils'
-import { quickSort } from '../sorting/quick-sort'
 
 const binarySearchRecursiveInner = <T>(
   array: T[],
@@ -27,7 +26,7 @@ const binarySearchRecursiveInner = <T>(
 
 /**
  * 二分搜索 时间复杂度 O(log(n)) 空间复杂度 O(1)
- * @param array 数组
+ * @param array 已排序数组
  * @param value 要搜索的值
  * @param compareFn 比较函数
  * @returns 位置
@@ -37,9 +36,8 @@ export const binarySearchRecursive = <T>(
   value: T,
   compareFn: CompareFn<T> = defaultCompare
 ): number => {
-  const sortedArray = quickSort(array)
   const low = 0
-  const high = sortedArray.length - 1
+  const high = array.length - 1
 
   return binarySearchRecursiveInner(array, value, low, high, compareFn)
 }

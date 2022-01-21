@@ -1,5 +1,4 @@
 import { Compare, CompareFn, defaultCompare } from '../../utils'
-import { quickSort } from '../sorting/quick-sort'
 
 /**
  * 二分搜索 时间复杂度 O(log(n)) 空间复杂度 O(1)
@@ -13,14 +12,12 @@ export const binarySearch = <T>(
   value: T,
   compareFn: CompareFn<T> = defaultCompare
 ): number => {
-  const sortedArray = quickSort(array, compareFn)
-
   let left = 0
   let right = array.length - 1
 
   while (left <= right) {
     const mid = ~~((left + right) / 2)
-    const element = sortedArray[mid]
+    const element = array[mid]
 
     if (compareFn(element, value) === Compare.LESS_THAN) {
       // 当前值小于要找的值

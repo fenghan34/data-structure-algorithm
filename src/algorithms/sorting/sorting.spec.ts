@@ -38,7 +38,7 @@ describe('Sorting', () => {
     expect(algorithm(arr5, ...rest)).toEqual(res5)
   }
 
-  it('should return an sorted array', () => {
+  it('should return a sorted array', () => {
     expect.hasAssertions()
 
     testSortAlgorithm(bubbleSort)
