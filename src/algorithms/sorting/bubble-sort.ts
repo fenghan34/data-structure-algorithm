@@ -10,6 +10,12 @@ export const bubbleSort = <T = number>(
   array: T[],
   compareFn: CompareFn<T> = defaultCompare
 ): T[] => {
+  // 3, 5, 4, 2, 1
+  // 3, 4, 2, 1, 5  | i = 0
+  // 3, 2, 1, 4, 5  | i = 1
+  // 2, 1, 3, 4, 5  | i = 2
+  // 1, 2, 3, 4, 5  | i = 3
+
   const { length } = array
 
   for (let i = 0; i < length; i++) {
