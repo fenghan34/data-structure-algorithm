@@ -1,5 +1,5 @@
-import { DoublyLinkedList } from '../linked-list/doubly-linked-list'
-import { defaultEquals, EqualsFn } from '@/utils'
+import { DoublyLinkedList } from '..'
+import { EqualsFn, defaultEquals } from '@/utils'
 
 /**
  * 使用链表实现栈

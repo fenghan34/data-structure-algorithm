@@ -1,4 +1,4 @@
-import { HashMapSeparateChaining } from '@/data-structures'
+import { HashMapSeparateChaining } from '.'
 
 describe('HashTableSeparateChaining', () => {
   let hashTable: HashMapSeparateChaining<string | number, string>

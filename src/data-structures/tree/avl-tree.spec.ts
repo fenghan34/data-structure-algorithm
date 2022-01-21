@@ -1,4 +1,4 @@
-import { AVLTree } from '@/data-structures'
+import { AVLTree } from '.'
 
 describe('AVLTree', () => {
   let tree: AVLTree<number>

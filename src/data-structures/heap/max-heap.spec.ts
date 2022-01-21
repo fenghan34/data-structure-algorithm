@@ -1,4 +1,4 @@
-import { MaxHeap } from '@/data-structures'
+import { MaxHeap } from '.'
 
 describe('MaxHeap', () => {
   let heap: MaxHeap<number>

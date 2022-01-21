@@ -1,10 +1,10 @@
-import { Stack } from '@/data-structures'
+import { StackLinkedList } from '.'
 
-describe('Stack', () => {
-  let stack: Stack<number>
+describe('StackLinkedList', () => {
+  let stack: StackLinkedList<number>
 
   beforeEach(() => {
-    stack = new Stack<number>()
+    stack = new StackLinkedList<number>()
   })
 
   test('push element', () => {
@@ -16,6 +16,8 @@ describe('Stack', () => {
   })
 
   test('pop element', () => {
+    expect(stack.pop()).toBeUndefined()
+
     stack.push(1)
     stack.push(2)
 

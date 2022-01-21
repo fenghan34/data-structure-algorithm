@@ -1,4 +1,4 @@
-import { Set } from '@/data-structures'
+import { Set } from '.'
 
 describe('Set', () => {
   let set: Set<number>
