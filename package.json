@@ -22,12 +22,12 @@
     "*.ts": "eslint",
     "**/*": "prettier -w -u"
   },
-  "prettier": "@fenghan/prettier-config",
   "devDependencies": {
-    "@fenghan/eslint-config-ts": "^1.0.4",
-    "@fenghan/prettier-config": "^1.0.5",
     "@types/jest": "^27.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
     "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jest": "^24.4.0",
     "husky": "^7.0.2",
     "jest": "^27.1.1",

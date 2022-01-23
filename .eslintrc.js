@@ -1,20 +1,19 @@
 module.exports = {
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
   extends: [
-    '@fenghan/eslint-config-ts',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:jest/recommended',
     'plugin:jest/style',
+    'prettier',
   ],
-  overrides: [
-    {
-      files: ['*.ts'],
-      parserOptions: {
-        project: 'tsconfig.json',
-      },
-    },
-  ],
+  env: {
+    node: true,
+  },
   rules: {
-    'import/no-unresolved': [2, { ignore: ['^@'] }],
-    'import/extensions': [2, 'never'],
-    'import/no-extraneous-dependencies': 'off',
+    '@typescript-eslint/no-this-alias': 'off',
+    '@typescript-eslint/no-explicit-any': ['error', { ignoreRestArgs: true }],
   },
 }
