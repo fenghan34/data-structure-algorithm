@@ -1,7 +1,7 @@
 export enum Compare {
-  LESS_THAN,
-  EQUAL,
-  BIGGER_THAN,
+  LESS_THAN = -1,
+  EQUAL = 0,
+  BIGGER_THAN = 1,
 }
 
 export type EqualsFn<T> = (a: T, b: T) => boolean
@@ -13,12 +13,12 @@ export type DiffFn<T> = (a: T, b: T) => number
 /**
  * 比较函数
  */
-export const defaultCompare = <T = number>(param1: T, param2: T): Compare => {
-  if (param1 < param2) {
+export const defaultCompare = <T = number>(a: T, b: T): Compare => {
+  if (a < b) {
     return Compare.LESS_THAN
   }
 
-  if (param1 === param2) {
+  if (a === b) {
     return Compare.EQUAL
   }
 
@@ -32,31 +32,29 @@ export const defaultEquals = <T>(a: T, b: T): boolean => a === b
 
 /**
  * 计算两数之差
- * @returns 差值
  */
-export const defaultDiff = <T = number>(param1: T, param2: T): number => {
-  if (typeof param1 === 'number' && typeof param2 === 'number') {
-    return param1 - param2
+export const defaultDiff = <T = number>(a: T, b: T): number => {
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a - b
   }
-  return Number(param1) - Number(param2)
+
+  return Number(a) - Number(b)
 }
 
 /**
- * 反转对比函数（参数位置反转）
+ * 反转对比函数
  */
-export const reverseCompare = <T = number>(compareFn: CompareFn<T>) => {
-  return (a: T, b: T): Compare => compareFn(b, a)
+export const reversedDefaultCompare = <T = number>(a: T, b: T) => {
+  return defaultCompare(b, a)
 }
 
 /**
  * 交换节点
  */
-export function swap<T>(array: T[], a: number, b: number): void {
+export function swap(array: unknown[], a: number, b: number): void {
   const temp = array[a]
   array[a] = array[b]
   array[b] = temp
-
-  // ;[array[a], array[b]] = [array[b], array[a]]
 }
 
 /**
@@ -85,9 +83,5 @@ export const defaultToString = (item: unknown): string => {
     return 'UNDEFINED'
   }
 
-  if (typeof item === 'string' || item instanceof String) {
-    return `${item}`
-  }
-
-  return item.toString()
+  return item + ''
 }
