@@ -12,5 +12,5 @@ module.exports = {
 
   collectCoverageFrom: ['src/**/*.ts'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/'],
-  coverageReporters: ['text', 'json-summary'],
+  coverageReporters: ['text', 'json-summary', 'lcov'],
 }
