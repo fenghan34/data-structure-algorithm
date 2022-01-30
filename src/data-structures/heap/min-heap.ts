@@ -75,7 +75,9 @@ export class MinHeap<T> {
       return this.heap.shift()
     }
 
-    const removedValue = this.heap.shift()
+    swap(this.heap, 0, this.heap.length - 1)
+    const removedValue = this.heap.pop()
+
     this.siftDown(0)
     return removedValue
   }
